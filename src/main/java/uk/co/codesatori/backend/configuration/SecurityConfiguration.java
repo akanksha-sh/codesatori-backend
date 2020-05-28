@@ -31,6 +31,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
+  // Disables CSRF, enables CORS.
+  // Permits access to /login
+  // Only allows all other requests after being authenticated
+  // Adds our login and authentication filters
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().cors().and().authorizeRequests()
@@ -43,6 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             UsernamePasswordAuthenticationFilter.class);
   }
 
+  // For CORS access from front-end domain
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

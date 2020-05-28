@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class AuthenticationFilter extends GenericFilterBean {
 
-  //TODO: Figure out what filterChain is
+  // Check if the header contains the JWT for the current authorized user, by calling getAuthentication().
+  // If everything is in place, we set the user in the SecurityContext and allow the request to move on
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
       throws IOException, ServletException {
