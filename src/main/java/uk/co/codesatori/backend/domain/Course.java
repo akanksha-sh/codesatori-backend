@@ -1,4 +1,4 @@
-package uk.co.codesatori.backend.uk.co.codesatori.backend.domain;
+package uk.co.codesatori.backend.domain;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +8,11 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class OnlineClass {
+public class Course {
 
-  public OnlineClass(String name, String code, Long teacherId) {
+  public Course() { }
+
+  public Course(String name, String code, Long teacherId) {
     this.name = name;
     this.code = code;
     this.teacherId = teacherId;
