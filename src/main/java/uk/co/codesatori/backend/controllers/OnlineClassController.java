@@ -30,7 +30,7 @@ public class OnlineClassController {
     courseRepository.save(course);
   }
 
-  @PutMapping("/classes/{id}")
+  @DeleteMapping("/classes/{id}")
   void deleteOnlineClass(@PathVariable Long id) {
     courseRepository.deleteById(id);
   }
