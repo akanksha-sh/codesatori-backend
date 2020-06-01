@@ -1,71 +1,73 @@
 package uk.co.codesatori.backend.configuration;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import uk.co.codesatori.backend.services.AuthenticationFilter;
-import uk.co.codesatori.backend.services.LoginFilter;
-import uk.co.codesatori.backend.services.UserDetailsServiceImpl;
+import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
-
+import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+  @Resource(name = "userService")
+  private UserDetailsService userDetailsService;
+
+  @Override
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
+
   @Autowired
-  private UserDetailsServiceImpl customUserDetailsService;
+  public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService)
+        .passwordEncoder(encoder());
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+        .csrf().disable()
+        .anonymous().disable();
+//        .authorizeRequests()
+//        .antMatchers("/api-docs/**").permitAll();
+  }
 
   @Bean
-  public PasswordEncoder passwordEncoder() {
+  public BCryptPasswordEncoder encoder(){
     return new BCryptPasswordEncoder();
   }
 
-  // Disables CSRF, enables CORS.
-  // Permits access to /login
-  // Only allows all other requests after being authenticated
-  // Adds our login and authentication filters
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().cors().and().authorizeRequests()
-        .antMatchers(HttpMethod.POST, "/login").permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .addFilterBefore(new LoginFilter("/login", authenticationManager()),
-            UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(new AuthenticationFilter(),
-            UsernamePasswordAuthenticationFilter.class);
-  }
-
-  // For CORS access from front-end domain
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(Arrays.asList("*"));
-    config.setAllowedMethods(Arrays.asList("*"));
-    config.setAllowedHeaders(Arrays.asList("*"));
-    config.setAllowCredentials(true);
-    config.applyPermitDefaultValues();
-
-    source.registerCorsConfiguration("/**", config);
-    return source;
-  }
-
-  // Builds a AuthenticationManager using the UserDetailsServiceImpl we wrote,
-  // as well as encoding the passwords using the BCrypt Encoder.
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(customUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-  }
+//  @Bean
+//  public FilterRegistrationBean corsFilter() {
+//    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//    CorsConfiguration config = new CorsConfiguration();
+//    config.setAllowCredentials(true);
+//    config.addAllowedOrigin("*");
+//    config.addAllowedHeader("*");
+//    config.addAllowedMethod("*");
+//    config.applyPermitDefaultValues();
+//    source.registerCorsConfiguration("/**", config);
+//    FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+//    bean.setOrder(0);
+//    return bean;
+//  }
 }
+

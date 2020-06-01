@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
-@Service
+@Service(value = "userService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   private UserRepository userRepository;
@@ -28,6 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     User user = userRepository.findByUserName(userName)
         .orElseThrow(() -> new UsernameNotFoundException("User: " + userName + " not found"));
     return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-        Arrays.asList(new SimpleGrantedAuthority("user")));
+        Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
   }
 }
