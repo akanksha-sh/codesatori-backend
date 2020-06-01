@@ -1,4 +1,6 @@
 package uk.co.codesatori.backend.configuration;
+
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +19,10 @@ import uk.co.codesatori.backend.services.AuthenticationFilter;
 import uk.co.codesatori.backend.services.LoginFilter;
 import uk.co.codesatori.backend.services.UserDetailsServiceImpl;
 
-import java.util.Arrays;
-
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
   @Autowired
   private UserDetailsServiceImpl customUserDetailsService;
 
@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             UsernamePasswordAuthenticationFilter.class);
   }
 
-  // For CORS access from front-end domain
+  // For CORS access from front-end model
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

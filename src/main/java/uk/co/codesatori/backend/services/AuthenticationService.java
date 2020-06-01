@@ -1,31 +1,32 @@
 package uk.co.codesatori.backend.services;
 
+import static java.util.Collections.emptyList;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-
-import static java.util.Collections.emptyList;
-
 public class AuthenticationService {
-  static final long EXPIRATIONTIME = 864_000_00;
-  static final String SIGNINGKEY = "codeSatoriSigningKey";
-  static final String BEARER_PREFIX = "Bearer";
-  static final String AUTH_HEADER = "Authorisation";
+
+  private static final long EXPIRATION_TIME = 864_000_00;
+  private static final String SIGNING_KEY = "codeSatoriSigningKey";
+  private static final String BEARER_PREFIX = "Bearer";
+  private static final String ACCESS_CONTROL_EXPOSE_HEADER = "Access-Control-Expose-Headers";
+  private static final String AUTH_HEADER = "Authorisation";
 
   // Adds the JWT token after successful authentication, containing the username,
   // to authorization header field.
-  static public void addJWTToken(HttpServletResponse response, String username) {
-    String JwtToken = Jwts.builder().setSubject(username)
-        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
-        .signWith(SignatureAlgorithm.HS512, SIGNINGKEY)
+  static public void addAuthentication(HttpServletResponse response, String username) {
+    String jwtToken = Jwts.builder().setSubject(username)
+        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+        .signWith(SignatureAlgorithm.HS512, SIGNING_KEY)
         .compact();
-    response.addHeader(AUTH_HEADER, BEARER_PREFIX + " " + JwtToken);
-    response.addHeader("Access-Control-Expose-Headers", AUTH_HEADER);
+    response.addHeader(AUTH_HEADER, BEARER_PREFIX + " " + jwtToken);
+    response.addHeader(ACCESS_CONTROL_EXPOSE_HEADER, AUTH_HEADER);
   }
 
   // Tries to get the username from the JWT in the authorization header, and then
@@ -34,7 +35,7 @@ public class AuthenticationService {
     String token = request.getHeader(AUTH_HEADER);
     if (token != null) {
       String user = Jwts.parser()
-          .setSigningKey(SIGNINGKEY)
+          .setSigningKey(SIGNING_KEY)
           .parseClaimsJws(token.replace(BEARER_PREFIX, ""))
           .getBody()
           .getSubject();
