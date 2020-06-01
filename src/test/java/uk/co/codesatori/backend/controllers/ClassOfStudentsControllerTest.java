@@ -45,7 +45,16 @@ public class ClassOfStudentsControllerTest {
   );
 
   @Test
-  public void canAddClassesOfStudents() {
+  public void addingAndUpdatingClassSavesToRepo() {
+    classOfStudentsController.addClassOfStudents(MR_WILLIAMS_CLASS);
+    classOfStudentsController.updateClassOfStudents(MR_MACLEOD_CLASS);
+    
+    verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
+    verify(classOfStudentsRepository).save(MR_MACLEOD_CLASS);
+  }
+
+  @Test
+  public void getsClassWithTheCorrectUUID() {
     when(classOfStudentsRepository.findById(UUID_1)).thenReturn(Optional.of(MR_WILLIAMS_CLASS));
     when(classOfStudentsRepository.findById(UUID_3)).thenReturn(Optional.of(MR_MACLEOD_CLASS));
 
@@ -62,5 +71,14 @@ public class ClassOfStudentsControllerTest {
     assertThat(payload1.getTeacherId()).isEqualTo(UUID_2);
     assertThat(payload2.getClassId()).isEqualTo(UUID_3);
     assertThat(payload2.getTeacherId()).isEqualTo(UUID_4);
+  }
+
+  @Test
+  public void deletesClassWithTheCorrectUUID() {
+    classOfStudentsController.deleteClassOfStudents(UUID_1);
+    classOfStudentsController.deleteClassOfStudents(UUID_3);
+
+    verify(classOfStudentsRepository).deleteById(UUID_1);
+    verify(classOfStudentsRepository).deleteById(UUID_3);
   }
 }
