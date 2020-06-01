@@ -34,6 +34,7 @@ public class ClassOfStudentsController {
 
   @PostMapping("/classes")
   void addClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+    /* TODO: shouldn't this only add if there's no entity with the id? */
     classOfStudentsRepository.save(classOfStudents);
   }
 

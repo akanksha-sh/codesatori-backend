@@ -45,10 +45,10 @@ public class ClassOfStudentsControllerTest {
   );
 
   @Test
-  public void addingAndUpdatingClassSavesToRepo() {
+  public void addingAndUpdatingClassSavesThemToRepo() {
     classOfStudentsController.addClassOfStudents(MR_WILLIAMS_CLASS);
     classOfStudentsController.updateClassOfStudents(MR_MACLEOD_CLASS);
-    
+
     verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
     verify(classOfStudentsRepository).save(MR_MACLEOD_CLASS);
   }
