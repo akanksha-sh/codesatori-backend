@@ -22,8 +22,13 @@ public class ClassOfStudentsController {
     this.classOfStudentsRepository = classOfStudentsRepository;
   }
 
+  @GetMapping("/classes/{id}")
+  public ClassOfStudents getClassOfStudents(@PathVariable UUID id) {
+    return classOfStudentsRepository.findById(id).orElse(null);
+  }
+
   @GetMapping("/classes")
-  public Iterable<ClassOfStudents> getClassesOfStudents() {
+  public Iterable<ClassOfStudents> getAllClassesOfStudents() {
     return classOfStudentsRepository.findAll();
   }
 

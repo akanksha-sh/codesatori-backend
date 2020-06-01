@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
-@Service
+@Service(value = "userService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   private UserRepository userRepository;
@@ -28,6 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         .orElseThrow(() -> new UsernameNotFoundException("User: " + userName + " not found"));
     return new org.springframework.security.core.userdetails.User(user.getUsername(),
         user.getPassword(),
-        Arrays.asList(new SimpleGrantedAuthority("user")));
+        Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
   }
 }

@@ -1,6 +1,7 @@
 package uk.co.codesatori.backend.services;
 
 class LoginCredentials {
+
   private final String username, password;
 
   LoginCredentials(String username, String password) {
