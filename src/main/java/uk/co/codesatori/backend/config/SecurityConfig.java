@@ -12,17 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import uk.co.codesatori.backend.services.UserDetailsServiceImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  private UserDetailsServiceImpl customUserDetailsService;
-
-  @Resource(name = "userService")
+  @Resource(name = "userDetailsService")
   private UserDetailsService userDetailsService;
 
   @Override
@@ -33,20 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService)
-        .passwordEncoder(encoder());
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
-        .csrf().disable()
+    http.csrf().disable()
         .anonymous().disable();
   }
 
   // For CORS access from front-end model
   @Bean
-  public BCryptPasswordEncoder encoder() {
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 }

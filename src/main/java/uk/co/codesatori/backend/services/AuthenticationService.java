@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 
 public class AuthenticationService {
 
-  private static final long EXPIRATION_TIME = 864_000_00;
+  private static final long EXPIRATION_TIME = 365 * 24 * 60 * 60;
   private static final String SIGNING_KEY = "codeSatoriSigningKey";
   private static final String BEARER_PREFIX = "Bearer";
   private static final String ACCESS_CONTROL_EXPOSE_HEADER = "Access-Control-Expose-Headers";
