@@ -15,6 +15,7 @@ public class OnlineClassController {
     this.courseRepository = courseRepository;
   }
 
+  @CrossOrigin
   @GetMapping("/classes")
   public Iterable<Course> getOnlineClasses() {
     return courseRepository.findAll();
