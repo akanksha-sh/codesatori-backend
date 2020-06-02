@@ -13,17 +13,24 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   private static final String RESOURCE_ID = "resource_id";
 
+
+  // Indicate that not only token-based authentication is allowed on these resources.
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) {
     resources.resourceId(RESOURCE_ID).stateless(false);
   }
 
+  //Configure security of our resource servers,
+  //only authorisations with role of ADMIN can access /classes* endpoint
+  //and exception handling is handled by the OAuth2AccessDeniedHandler
   @Override
   public void configure(HttpSecurity http) throws Exception {
     http.
         anonymous().disable()
         .authorizeRequests()
         .antMatchers("/classes*").access("hasRole('ADMIN')")
-        .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+        .and()
+        .exceptionHandling()
+        .accessDeniedHandler(new OAuth2AccessDeniedHandler());
   }
 }

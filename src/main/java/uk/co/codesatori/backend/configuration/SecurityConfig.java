@@ -19,21 +19,25 @@ import javax.annotation.Resource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+  //links the userDetailsService with the userDetailsSericeImpl we created
   @Resource(name = "userService")
   private UserDetailsService userDetailsService;
 
+  //Expose the authentication manager that we created so it can be autowired
   @Override
   @Bean
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
   }
 
+  //setting up the custom authentication manager using our userDetailsService and encryption
   @Autowired
   public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService)
         .passwordEncoder(encoder());
   }
 
+  //Disable CSRF since we have our own way of authenticating with tokens, and disable anonymous authentication
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
