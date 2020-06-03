@@ -15,13 +15,13 @@ build:
   stage: build
   script:
     - docker build --target MAVEN_BUILD -t codesatori-backend .
-    - docker run -d codesatori-backend
+    - docker run codesatori-backend
 
 deploy-vm:
   stage: deploy-vm
   script:
     - docker build --target RUN -t codesatori-backend .
-    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -d -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend –server.port="$VM_DEPLOYMENT_PORT"
+    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend –server.port="$VM_DEPLOYMENT_PORT"
 
 deploy-heroku:
   stage: deploy-heroku
