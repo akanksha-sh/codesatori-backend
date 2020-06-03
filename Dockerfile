@@ -17,5 +17,5 @@ ARG JAR_FILE=codesatori_backend-0.0.1-SNAPSHOT.jar
 WORKDIR /backend/
 COPY --from=MAVEN_BUILD /build/target/${JAR_FILE} /backend/
 
-ENTRYPOINT ["java","-jar",${JAR_FILE}]
+ENTRYPOINT ["java","-jar","codesatori_backend-0.0.1-SNAPSHOT.jar"]
 CMD ["–server.port=$PORT"]
