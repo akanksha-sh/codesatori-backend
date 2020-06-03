@@ -12,9 +12,7 @@ RUN mvn package
 #copy and run app
 FROM openjdk:11-slim as RUN
 
-ARG PORT=5050
-
 WORKDIR /backend/
 COPY --from=MAVEN_BUILD /build/target/codesatori_backend-0.0.1-SNAPSHOT.jar /backend/
 
-CMD java -jar -Dserver.port=${PORT} codesatori_backend-0.0.1-SNAPSHOT.jar
+CMD java -jar -Dserver.port=$PORT codesatori_backend-0.0.1-SNAPSHOT.jar
