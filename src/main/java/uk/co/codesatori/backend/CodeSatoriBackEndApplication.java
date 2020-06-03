@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CodeSatoriBackEndApplication {
 
+  public CodeSatoriBackEndApplication() {
+  }
+
+
   public static void main(String[] args) {
     SpringApplication.run(CodeSatoriBackEndApplication.class, args);
   }
+
 }
