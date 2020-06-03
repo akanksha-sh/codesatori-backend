@@ -1,5 +1,5 @@
 #pull official docker image for ReactJS
-FROM maven:3.6.3-jdk-11-alpine AS MAVEN_BUILD
+FROM maven:3.6.3-openjdk-11 AS MAVEN_BUILD
 
 COPY pom.xml /build/
 COPY src /build/src/
