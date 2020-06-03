@@ -10,7 +10,7 @@ WORKDIR /build/
 RUN mvn package
 
 #copy and run app
-FROM openjdk:11-alpine as RUN
+FROM openjdk:11-slim as RUN
 
 ARG JAR_FILE=codesatori_backend-0.0.1-SNAPSHOT.jar
 
