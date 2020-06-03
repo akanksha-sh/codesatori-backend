@@ -1,0 +1,31 @@
+variables:
+  VM_IP: "146.169.41.91:8000"
+  VM_DEPLOYMENT_PORT: "5050"
+  TIME_TO_LIVE_IN_SECONDS: "90"
+
+stages:
+  - build
+  - deploy-vm
+  - deploy-heroku
+
+before_script:
+  - docker info
+
+build:
+  stage: build
+  script:
+    - docker build --target MAVEN_BUILD -t codesatori-backend .
+    - docker run -d codesatori-backend
+
+deploy-vm:
+  stage: deploy-vm
+  script:
+    - docker build --target RUN -t codesatori-backend .
+    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -d -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend –server.port="$VM_DEPLOYMENT_PORT"
+
+deploy-heroku:
+  stage: deploy-heroku
+  only:
+    - master
+  script:
+    - dpl --provider=heroku --app=codesatori-backend --api-key=$HEROKU_API_KEY
