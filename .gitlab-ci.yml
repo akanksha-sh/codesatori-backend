@@ -20,7 +20,7 @@ build:
 deploy-vm:
   stage: deploy-vm
   script:
-    - docker build --target RUN -t codesatori-backend .
+    - docker build --target RUN --build-arg PORT="$VM_DEPLOYMENT_PORT" -t codesatori-backend .
     - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend
 
 deploy-heroku:
