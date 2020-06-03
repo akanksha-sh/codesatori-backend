@@ -15,7 +15,7 @@ build:
   stage: build
   script:
     - docker build --target MAVEN_BUILD -t codesatori-backend .
-    - docker run codesatori-backend
+    # - docker run codesatori-backend
 
 deploy-vm:
   stage: deploy-vm
