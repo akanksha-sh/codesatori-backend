@@ -14,9 +14,9 @@ public abstract class User {
 
   @Id
   @Column(nullable = false, updatable = false)
-  private final UUID id;
-  private final String username;
-  private final String password;
+  private UUID id;
+  private String username;
+  private String password;
 
   public User(UUID id, String username, String password) {
     this.id = id;
@@ -24,15 +24,5 @@ public abstract class User {
     this.password = password;
   }
 
-  public UUID getId() {
-    return id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
+  public User() {}
 }

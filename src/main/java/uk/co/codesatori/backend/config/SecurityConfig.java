@@ -39,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .anonymous().disable();
   }
 
-  // For CORS access from front-end model
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();

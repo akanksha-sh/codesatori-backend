@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
   static final String CLIENT_ID = "codesatori-web";
-  static final String CLIENT_SECRET = "$2y$12$HpfJW6LvKn2Ft3OIMmwBuenWLMhFD.IOpoHhacegJKRiF5Ov5..U2";
+  static final String CLIENT_SECRET = "$2y$12$HpfJW6LvKn2Ft3OIMmwBuenWLMhFD.IOpoHhacegJKRiF5Ov5..U2"; // BCrypt for Empty String
   static final String GRANT_TYPE_PASSWORD = "password";
   static final String AUTHORIZATION_CODE = "authorization_code";
   static final String REFRESH_TOKEN = "refresh_token";

@@ -13,32 +13,17 @@ import lombok.Setter;
 @Setter
 public class ClassOfStudents {
 
-  @Id
-  private final UUID classId;
-  private final String name;
-  private final UUID teacherId;
-  private final Collection<UUID> studentIDs;
+  public ClassOfStudents() {
+  }
 
   public ClassOfStudents(UUID classId, String name, UUID teacherId) {
     this.classId = classId;
     this.name = name;
     this.teacherId = teacherId;
-    this.studentIDs = new LinkedList<>();
   }
 
-  public UUID getClassId() {
-    return classId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public UUID getTeacherId() {
-    return teacherId;
-  }
-
-  public Collection<UUID> getStudentIDs() {
-    return studentIDs;
-  }
+  @Id
+  private UUID classId;
+  private String name;
+  private UUID teacherId;
 }
