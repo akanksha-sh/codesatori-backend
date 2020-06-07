@@ -20,7 +20,7 @@ public class FirebaseConfig {
   SecurityProperties secProps;
 
   @Primary
-  @Bean
+  //@Bean
   public void firebaseInit() throws IOException {
     FirebaseOptions options = new FirebaseOptions.Builder()
         .setCredentials(GoogleCredentials.getApplicationDefault())
@@ -30,7 +30,7 @@ public class FirebaseConfig {
     }
   }
 
-  @Bean
+  //@Bean
   public Firestore getDatabase() throws IOException {
     FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder()
         .setCredentials(GoogleCredentials.getApplicationDefault()).build();
