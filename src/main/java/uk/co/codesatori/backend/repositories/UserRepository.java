@@ -9,5 +9,5 @@ import uk.co.codesatori.backend.model.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, UUID> {
 
-  Optional<User> findByEmail(String email);
+  Optional<User> findBySchool(String school);
 }

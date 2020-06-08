@@ -1,5 +1,6 @@
 package uk.co.codesatori.backend.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.codesatori.backend.model.Student;
+import uk.co.codesatori.backend.model.Teacher;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
@@ -22,9 +25,14 @@ public class UserController {
     this.userRepository = userRepository;
   }
 
+  private UUID toUUID(String uid) {
+    return UUID.nameUUIDFromBytes(uid.getBytes());
+  }
+
   @GetMapping("/user/{id}")
-  public User getUser(@PathVariable UUID id) {
-    return userRepository.findById(id).orElse(null);
+  public User getUser(@PathVariable String id) {
+    return userRepository.findById(toUUID(id)).orElse(null);
+    //return new Teacher(toUUID(id), "Example High School");
   }
 
   @GetMapping("/user")
@@ -44,8 +52,8 @@ public class UserController {
   }
 
   @DeleteMapping("/user/{id}")
-  void deleteUser(@PathVariable UUID id) {
-    userRepository.deleteById(id);
+  void deleteUser(@PathVariable String id) {
+    userRepository.deleteById(toUUID(id));
   }
 
 }

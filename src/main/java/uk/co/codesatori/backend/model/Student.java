@@ -6,7 +6,7 @@ import java.util.UUID;
 @Entity
 public class Student extends User {
 
-  public Student(UUID id, String firstName, String lastName, String email, String password) {
-    super(id, firstName, lastName, email, password);
+  public Student(UUID id, String school) {
+    super(id, "ROLE_STUDENT", school);
   }
 }

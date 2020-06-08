@@ -20,17 +20,13 @@ public abstract class User {
   @Id
   @Column(nullable = false, updatable = false)
   private UUID id;
-  private String firstName;
-  private String lastName;
-  private String email;
-  private String password;
+  private String role;
+  private String school;
 
-  protected User(UUID id, String firstName, String lastName, String email, String password) {
+  public User(UUID id, String role, String school) {
     this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
+    this.role = role;
+    this.school = school;
   }
 
   public User() {

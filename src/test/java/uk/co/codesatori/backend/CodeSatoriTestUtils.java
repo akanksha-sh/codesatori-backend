@@ -13,18 +13,12 @@ public class CodeSatoriTestUtils {
 
   public static User MR_WILLIAMS = new Teacher(
       UUID_1,
-      "Eliot",
-      "Williams",
-      "ewilliams@mtsn.org.uk",
-      "password1"
+      "Eliot"
   );
 
   public static User MR_MACLEOD = new Teacher(
       UUID_2,
-      "Graham",
-      "Macleod",
-      "gmacleod@mtsn.org.uk",
-      "password2"
+      "Graham"
   );
 
 }

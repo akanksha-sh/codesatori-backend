@@ -43,7 +43,7 @@ public class CodeSatoriDBIntegrationTest {
         .content(objectMapper.writeValueAsString(MR_WILLIAMS)))
         .andExpect(status().isOk());
 
-    Optional<User> user = userRepository.findByEmail(MR_WILLIAMS.getEmail());
+    Optional<User> user = userRepository.findById(MR_WILLIAMS.getId());
     assertThat(user.isPresent());
   }
 }
