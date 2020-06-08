@@ -3,6 +3,10 @@ package uk.co.codesatori.backend.controllers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.MR_MACLEOD;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.MR_WILLIAMS;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_1;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,21 +32,6 @@ public class UserControllerTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  private static UUID UUID_1 = UUID.fromString("449cefa5-47cd-4777-adbd-5653b051ef5a");
-  private static UUID UUID_2 = UUID.fromString("33123be4-1423-483b-80ae-b558d04d6008");
-
-  private static User MR_WILLIAMS = new Teacher(
-      UUID_1,
-      "mrwilliams",
-      "password1"
-  );
-
-  private static User MR_MACLEOD = new Teacher(
-      UUID_2,
-      "mrmacleod",
-      "password2"
-  );
-
   @Test
   public void addingAndUpdatingUsersSavesThemToRepo() {
     userController.addUser(MR_WILLIAMS);
@@ -66,10 +55,8 @@ public class UserControllerTest {
     assertThat(payload1).isNotNull();
     assertThat(payload2).isNotNull();
 
-    assertThat(payload1.getUsername()).isEqualTo(MR_WILLIAMS.getUsername());
-    assertThat(payload1.getPassword()).isEqualTo(MR_WILLIAMS.getPassword());
-    assertThat(payload2.getUsername()).isEqualTo(MR_MACLEOD.getUsername());
-    assertThat(payload2.getPassword()).isEqualTo(MR_MACLEOD.getPassword());
+    assertThat(payload1.getId()).isEqualTo(MR_WILLIAMS.getId());
+    assertThat(payload2.getId()).isEqualTo(MR_MACLEOD.getId());
   }
 
   @Test

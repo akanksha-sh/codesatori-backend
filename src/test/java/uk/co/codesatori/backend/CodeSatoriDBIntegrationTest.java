@@ -1,7 +1,13 @@
 package uk.co.codesatori.backend;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.MR_WILLIAMS;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,35 +20,12 @@ import uk.co.codesatori.backend.model.Teacher;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes= CodeSatoriBackEndApplication.class)
+@SpringBootTest(classes = CodeSatoriBackEndApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class CodeSatoriDBIntegrationTest {
-
-  private static UUID UUID_1 = UUID.fromString("449cefa5-47cd-4777-adbd-5653b051ef5a");
-  private static UUID UUID_2 = UUID.fromString("33123be4-1423-483b-80ae-b558d04d6008");
-
-  private static User MR_WILLIAMS = new Teacher(
-      UUID_1,
-      "mrwilliams",
-      "password1"
-  );
-
-  private static User MR_MACLEOD = new Teacher(
-      UUID_2,
-      "mrmacleod",
-      "password2"
-  );
 
   @Autowired
   private MockMvc mockMvc;
@@ -54,22 +37,15 @@ public class CodeSatoriDBIntegrationTest {
   private UserRepository userRepository;
 
   @Test
-  public void testFindAll() {
-    Iterable<User> users = userRepository.findAll();
-    assertFalse(users.iterator().hasNext());
-  }
+  public void postingUserToDBCreatesNewEntry() throws Exception {
+    mockMvc.perform(post("/user_details")
+        .contentType("application/json")
+        .content(objectMapper.writeValueAsString(MR_WILLIAMS)))
+        .andExpect(status().isOk());
 
-//  @Test
-//  public void addUser() throws Exception {
-//    mockMvc.perform(post("/user")
-//        .contentType("application/json")
-//        .content(objectMapper.writeValue(
-//            MR_WILLIAMS);))
-//        .andExpect(status().isOk());
-//
-//    Optional<User> user = userRepository.findByUsername("mrwilliams");
-//   // assertThat(user.isEmpty());
-//  }
+    Optional<User> user = userRepository.findByEmail(MR_WILLIAMS.getEmail());
+    assertThat(user.isPresent());
+  }
 }
 
 
