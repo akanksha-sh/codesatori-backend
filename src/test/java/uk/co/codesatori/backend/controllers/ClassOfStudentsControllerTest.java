@@ -9,15 +9,20 @@ import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_3;
 import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_4;
 
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.co.codesatori.backend.CodeSatoriBackEndApplication;
 import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = CodeSatoriBackEndApplication.class)
 public class ClassOfStudentsControllerTest {
 
   @InjectMocks
@@ -32,15 +37,15 @@ public class ClassOfStudentsControllerTest {
   }
 
   private static ClassOfStudents MR_WILLIAMS_CLASS = new ClassOfStudents(
-      UUID_1,
+      UUID_3,
       "Mr Williams' Class",
-      UUID_2
+      UUID_1
   );
 
   private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
-      UUID_3,
+      UUID_4,
       "Mr Macleod's Class",
-      UUID_4
+      UUID_2
   );
 
   @Test
@@ -66,10 +71,10 @@ public class ClassOfStudentsControllerTest {
     assertThat(payload1).isNotNull();
     assertThat(payload2).isNotNull();
 
-    assertThat(payload1.getClassId()).isEqualTo(UUID_1);
-    assertThat(payload1.getTeacherId()).isEqualTo(UUID_2);
-    assertThat(payload2.getClassId()).isEqualTo(UUID_3);
-    assertThat(payload2.getTeacherId()).isEqualTo(UUID_4);
+    assertThat(payload1.getClassId()).isEqualTo(UUID_3);
+    assertThat(payload1.getTeacherId()).isEqualTo(UUID_1);
+    assertThat(payload2.getClassId()).isEqualTo(UUID_4);
+    assertThat(payload2.getTeacherId()).isEqualTo(UUID_2);
   }
 
   @Test

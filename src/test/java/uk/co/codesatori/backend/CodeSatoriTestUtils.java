@@ -1,24 +1,34 @@
 package uk.co.codesatori.backend;
 
 import java.util.UUID;
-import uk.co.codesatori.backend.model.Teacher;
 import uk.co.codesatori.backend.model.User;
+import uk.co.codesatori.backend.model.User.ROLE;
 
 public class CodeSatoriTestUtils {
 
-  public static UUID UUID_1 = UUID.fromString("449cefa5-47cd-4777-adbd-5653b051ef5a");
-  public static UUID UUID_2 = UUID.fromString("33123be4-1423-483b-80ae-b558d04d6008");
+  public static String FIREBASE_UUID_1 = "7dh28wud8b9s02DJWus9f7Wbd8S7";
+  public static String FIREBASE_UUID_2 = "9sW7gb2hSkfWJD8uj3n583Shwb6G";
+
+  public static UUID UUID_1 = UUID.nameUUIDFromBytes(FIREBASE_UUID_1.getBytes());
+  public static UUID UUID_2 = UUID.nameUUIDFromBytes(FIREBASE_UUID_2.getBytes());
+
   public static UUID UUID_3 = UUID.fromString("031e376f-c89a-47b6-a380-8fc854d2b805");
   public static UUID UUID_4 = UUID.fromString("850426ff-f01c-425e-b9e9-d0dd77bd8a1f");
 
-  public static User MR_WILLIAMS = new Teacher(
+
+  public static User MR_WILLIAMS = new User(
       UUID_1,
-      "Eliot"
+      "Eliot",
+      "Williams",
+      ROLE.TEACHER.value()
+
   );
 
-  public static User MR_MACLEOD = new Teacher(
+  public static User MR_MACLEOD = new User(
       UUID_2,
-      "Graham"
+      "Graham",
+      "Macleod",
+      ROLE.TEACHER.value()
   );
 
 }

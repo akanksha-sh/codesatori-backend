@@ -1,6 +1,5 @@
 package uk.co.codesatori.backend.controllers;
 
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.codesatori.backend.model.Student;
-import uk.co.codesatori.backend.model.Teacher;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
@@ -32,7 +29,6 @@ public class UserController {
   @GetMapping("/user/{id}")
   public User getUser(@PathVariable String id) {
     return userRepository.findById(toUUID(id)).orElse(null);
-    //return new Teacher(toUUID(id), "Example High School");
   }
 
   @GetMapping("/user")
