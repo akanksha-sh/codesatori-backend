@@ -4,8 +4,7 @@ stages:
 
 before_script:
   - docker info
-  - echo "$GOOGLE_APPLICATION_CREDENTIALS_FILE"
-  - echo "$GOOGLE_APPLICATION_CREDENTIALS_FILE" > "cred.json"
+  - echo "$GOOGLE_APPLICATION_CREDENTIALS" > "cred.json"
 
 build_and_test:
   stage: build_and_test

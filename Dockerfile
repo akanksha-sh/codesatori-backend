@@ -7,7 +7,7 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=./cred.json
 WORKDIR /build/
 
 COPY . ./
-RUN ls
+# Delete below line in next commit if deploy works
 RUN cat ./cred.json
 RUN mvn package
 
