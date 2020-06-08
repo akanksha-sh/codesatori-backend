@@ -4,25 +4,19 @@ variables:
   TIME_TO_LIVE_IN_SECONDS: "90"
 
 stages:
-  - build
-  - deploy-vm
+  - build_and_test
   - deploy-heroku
 
 before_script:
   - docker info
-  - echo "$GOOGLE_APPLICATION_CREDENTIALS" > "cred.json"
 
-build:
-  stage: build
+after_script:
+  - docker system prune -f --all
+
+build_and_test:
+  stage: build_and_test
   script:
     - docker build --target MAVEN_BUILD -t codesatori-backend .
-    # - docker run codesatori-backend
-
-deploy-vm:
-  stage: deploy-vm
-  script:
-    - docker build --target RUN -t codesatori-backend .
-    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend
 
 deploy-heroku:
   stage: deploy-heroku
