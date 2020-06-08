@@ -6,6 +6,7 @@ WORKDIR /build/
 
 COPY . ./
 
+RUN export GOOGLE_APPLICATION_CREDENTIALS="/cred.json"
 RUN mvn package
 
 #copy and run app
