@@ -15,13 +15,13 @@ public abstract class User {
   @Id
   @Column(nullable = false, updatable = false)
   private UUID id;
-  private String username;
-  private String password;
+  private String role;
+  private String school;
 
-  public User(UUID id, String username, String password) {
+  public User(UUID id, String role, String school) {
     this.id = id;
-    this.username = username;
-    this.password = password;
+    this.role = role;
+    this.school = school;
   }
 
   public User() {}

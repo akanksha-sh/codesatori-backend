@@ -28,19 +28,19 @@ public class UserControllerTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  private static UUID UUID_1 = UUID.fromString("449cefa5-47cd-4777-adbd-5653b051ef5a");
-  private static UUID UUID_2 = UUID.fromString("33123be4-1423-483b-80ae-b558d04d6008");
+  private static String UID_1 = "7dh28wud8b9s02DJWus9f7Wbd8S7";
+  private static UUID UUID_1 = UUID.nameUUIDFromBytes(UID_1.getBytes());
+  private static String UID_2 = "9sW7gb2hSkfWJD8uj3n583Shwb6G";
+  private static UUID UUID_2 = UUID.nameUUIDFromBytes(UID_2.getBytes());
 
   private static User MR_WILLIAMS = new Teacher(
       UUID_1,
-      "mrwilliams",
-      "password1"
+      "Knightsbridge College"
   );
 
   private static User MR_MACLEOD = new Teacher(
       UUID_2,
-      "mrmacleod",
-      "password2"
+      "Kensington Secondary School"
   );
 
   @Test
@@ -57,8 +57,8 @@ public class UserControllerTest {
     when(userRepository.findById(UUID_1)).thenReturn(Optional.of(MR_WILLIAMS));
     when(userRepository.findById(UUID_2)).thenReturn(Optional.of(MR_MACLEOD));
 
-    User payload1 = userController.getUser(UUID_1);
-    User payload2 = userController.getUser(UUID_2);
+    User payload1 = userController.getUser(UID_1);
+    User payload2 = userController.getUser(UID_2);
 
     verify(userRepository).findById(UUID_1);
     verify(userRepository).findById(UUID_2);
@@ -66,16 +66,16 @@ public class UserControllerTest {
     assertThat(payload1).isNotNull();
     assertThat(payload2).isNotNull();
 
-    assertThat(payload1.getUsername()).isEqualTo(MR_WILLIAMS.getUsername());
-    assertThat(payload1.getPassword()).isEqualTo(MR_WILLIAMS.getPassword());
-    assertThat(payload2.getUsername()).isEqualTo(MR_MACLEOD.getUsername());
-    assertThat(payload2.getPassword()).isEqualTo(MR_MACLEOD.getPassword());
+    assertThat(payload1.getRole()).isEqualTo(MR_WILLIAMS.getRole());
+    assertThat(payload1.getSchool()).isEqualTo(MR_WILLIAMS.getSchool());
+    assertThat(payload2.getRole()).isEqualTo(MR_MACLEOD.getRole());
+    assertThat(payload2.getSchool()).isEqualTo(MR_MACLEOD.getSchool());
   }
 
   @Test
   public void deletesClassWithTheCorrectUUID() {
-    userController.deleteUser(UUID_1);
-    userController.deleteUser(UUID_2);
+    userController.deleteUser(UID_1);
+    userController.deleteUser(UID_2);
 
     verify(userRepository).deleteById(UUID_1);
     verify(userRepository).deleteById(UUID_2);

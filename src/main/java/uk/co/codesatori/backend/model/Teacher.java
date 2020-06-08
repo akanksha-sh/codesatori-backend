@@ -6,8 +6,8 @@ import java.util.UUID;
 @Entity
 public class Teacher extends User {
 
-  public Teacher(UUID id, String username, String password) {
-    super(id, username, password);
+  public Teacher(UUID id, String school) {
+    super(id, "ROLE_TEACHER", school);
   }
 
   public Teacher() {}
