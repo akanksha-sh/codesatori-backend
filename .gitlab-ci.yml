@@ -22,7 +22,7 @@ deploy-vm:
   stage: deploy-vm
   script:
     - docker build --target RUN -t codesatori-backend .
-    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run --env GOOGLE_APPLICATION_CREDENTIALS_FILE="cred.json" -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend
+    - timeout --preserve-status "$TIME_TO_LIVE_IN_SECONDS" docker run -p "$VM_IP":"$VM_DEPLOYMENT_PORT" codesatori-backend
 
 deploy-heroku:
   stage: deploy-heroku
