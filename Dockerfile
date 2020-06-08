@@ -7,7 +7,8 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=./cred.json
 WORKDIR /build/
 
 COPY . ./
-RUN cat GOOGLE_APPLICATION_CREDENTIALS
+RUN ls
+RUN cat ./cred.json
 RUN mvn package
 
 #copy and run app
