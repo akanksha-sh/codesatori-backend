@@ -9,6 +9,7 @@ stages:
 
 before_script:
   - docker info
+  - echo "$GOOGLE_APPLICATION_CREDENTIALS" > "cred.json"
 
 after_script:
   - docker system prune -f --all
