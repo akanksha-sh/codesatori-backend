@@ -5,8 +5,8 @@ FROM maven:3.6.3-openjdk-11 AS MAVEN_BUILD
 WORKDIR /build/
 
 COPY . ./
-
-RUN export GOOGLE_APPLICATION_CREDENTIALS="/cred.json"
+RUN ls
+RUN export GOOGLE_APPLICATION_CREDENTIALS="cred.json"
 RUN mvn package
 
 #copy and run app
