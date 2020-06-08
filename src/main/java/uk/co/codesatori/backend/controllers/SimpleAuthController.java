@@ -22,7 +22,8 @@ public class SimpleAuthController {
 
   @GetMapping("/create/token")
   public String getCustomToken() throws FirebaseAuthException {
-    return FirebaseAuth.getInstance().createCustomToken(String.valueOf(securityService.getUser().getUid()));
+    return FirebaseAuth.getInstance()
+        .createCustomToken(String.valueOf(securityService.getUser().getUid()));
   }
 
 }

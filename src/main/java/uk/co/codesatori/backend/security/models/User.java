@@ -1,7 +1,6 @@
 package uk.co.codesatori.backend.security.models;
 
 import java.io.Serializable;
-
 import lombok.Data;
 
 @Data

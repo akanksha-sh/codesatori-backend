@@ -1,5 +1,6 @@
 package uk.co.codesatori.backend.security;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,8 +10,6 @@ import uk.co.codesatori.backend.security.models.Credentials;
 import uk.co.codesatori.backend.security.models.SecurityProperties;
 import uk.co.codesatori.backend.security.models.User;
 import uk.co.codesatori.backend.utils.CookieUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class SecurityService {

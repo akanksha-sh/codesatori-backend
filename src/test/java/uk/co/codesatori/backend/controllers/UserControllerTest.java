@@ -13,18 +13,12 @@ import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.co.codesatori.backend.CodeSatoriBackEndApplication;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = CodeSatoriBackEndApplication.class)
 public class UserControllerTest {
 
   @InjectMocks

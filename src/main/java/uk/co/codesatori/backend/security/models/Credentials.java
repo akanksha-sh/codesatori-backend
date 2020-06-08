@@ -1,7 +1,6 @@
 package uk.co.codesatori.backend.security.models;
 
 import com.google.firebase.auth.FirebaseToken;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

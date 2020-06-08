@@ -3,6 +3,8 @@ package uk.co.codesatori.backend.controllers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.SessionCookieOptions;
+import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,9 +12,6 @@ import uk.co.codesatori.backend.security.SecurityService;
 import uk.co.codesatori.backend.security.models.Credentials;
 import uk.co.codesatori.backend.security.models.SecurityProperties;
 import uk.co.codesatori.backend.utils.CookieUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class SessionAuthController {

@@ -1,6 +1,14 @@
 package uk.co.codesatori.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +26,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import uk.co.codesatori.backend.security.models.SecurityProperties;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -46,11 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public AuthenticationEntryPoint restAuthenticationEntryPoint() {
     return new AuthenticationEntryPoint() {
       @Override
-      public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                           AuthenticationException e) throws IOException, ServletException {
+      public void commence(HttpServletRequest httpServletRequest,
+          HttpServletResponse httpServletResponse,
+          AuthenticationException e) throws IOException, ServletException {
         Map<String, Object> errorObject = new HashMap<String, Object>();
         int errorCode = 401;
-        errorObject.put("message", "Unauthorized access of protected resource, invalid credentials");
+        errorObject
+            .put("message", "Unauthorized access of protected resource, invalid credentials");
         errorObject.put("error", HttpStatus.UNAUTHORIZED);
         errorObject.put("code", errorCode);
         errorObject.put("timestamp", new Timestamp(new Date().getTime()));
@@ -76,10 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable().formLogin().disable()
-        .httpBasic().disable().exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint())
+    http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable().formLogin()
+        .disable()
+        .httpBasic().disable().exceptionHandling()
+        .authenticationEntryPoint(restAuthenticationEntryPoint())
         .and().authorizeRequests()
-        .antMatchers(restSecProps.getAllowedPublicApis().stream().toArray(String[]::new)).permitAll()
+        .antMatchers(restSecProps.getAllowedPublicApis().stream().toArray(String[]::new))
+        .permitAll()
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated().and()
         .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

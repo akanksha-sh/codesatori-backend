@@ -37,18 +37,18 @@ public class UserController {
   }
 
   @PostMapping("/user")
-  void addUser(@RequestBody User user) {
+  public void addUser(@RequestBody User user) {
     /* TODO: shouldn't this only add if there's no entity with the id? */
     userRepository.save(user);
   }
 
   @PutMapping("/user")
-  void updateUser(@RequestBody User user) {
+  public void updateUser(@RequestBody User user) {
     userRepository.save(user);
   }
 
   @DeleteMapping("/user/{id}")
-  void deleteUser(@PathVariable String id) {
+  public void deleteUser(@PathVariable String id) {
     userRepository.deleteById(toUUID(id));
   }
 

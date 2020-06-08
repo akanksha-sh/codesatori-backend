@@ -15,33 +15,33 @@ security:
     path: /
   allow-credentials: true
   allowed-origins:
-    - https://${DOMAIN}
-    - http://localhost:3000
+  - https://${DOMAIN}
+  - http://localhost:3000
   allowed-methods:
-    - GET
-    - POST
-    - PUT
-    - PATCH
-    - DELETE
-    - OPTIONS
+  - GET
+  - POST
+  - PUT
+  - PATCH
+  - DELETE
+  - OPTIONS
   allowed-headers:
-    - Authorization
-    - Origin
-    - Content-Type
-    - Accept
-    - Accept-Encoding
-    - Accept-Language
-    - Access-Control-Allow-Origin
-    - Access-Control-Allow-Headers
-    - Access-Control-Request-Method
-    - X-Requested-With
-    - X-Auth-Token
-    - X-Xsrf-Token
-    - Cache-Control
-    - Id-Token
+  - Authorization
+  - Origin
+  - Content-Type
+  - Accept
+  - Accept-Encoding
+  - Accept-Language
+  - Access-Control-Allow-Origin
+  - Access-Control-Allow-Headers
+  - Access-Control-Request-Method
+  - X-Requested-With
+  - X-Auth-Token
+  - X-Xsrf-Token
+  - Cache-Control
+  - Id-Token
   allowed-public-apis:
-    - /favicon.ico
-    - /session/login
-    - /public/*
+  - /favicon.ico
+  - /session/login
+  - /public/*
   exposed-headers:
-    - X-Xsrf-Token
+  - X-Xsrf-Token

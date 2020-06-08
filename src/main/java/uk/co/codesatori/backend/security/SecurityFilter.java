@@ -3,6 +3,12 @@ package uk.co.codesatori.backend.security;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,13 +20,6 @@ import uk.co.codesatori.backend.security.models.Credentials;
 import uk.co.codesatori.backend.security.models.SecurityProperties;
 import uk.co.codesatori.backend.security.models.User;
 import uk.co.codesatori.backend.utils.CookieUtils;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 @Slf4j
@@ -39,7 +38,8 @@ public class SecurityFilter extends OncePerRequestFilter {
   SecurityProperties securityProps;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain)
       throws ServletException, IOException {
     verifyToken(request);
     filterChain.doFilter(request, response);
@@ -49,7 +49,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     String session = null;
     FirebaseToken decodedToken = null;
     Credentials.CredentialType type = null;
-    boolean strictServerSessionEnabled = securityProps.getFirebaseProps().isEnableStrictServerSession();
+    boolean strictServerSessionEnabled = securityProps.getFirebaseProps()
+        .isEnableStrictServerSession();
     Cookie sessionCookie = cookieUtils.getCookie("session");
     String token = securityService.getBearerToken(request);
     try {
@@ -70,7 +71,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
     User user = firebaseTokenToUserDto(decodedToken);
     if (user != null) {
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
+      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+          user,
           new Credentials(type, decodedToken, token, session), null);
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);

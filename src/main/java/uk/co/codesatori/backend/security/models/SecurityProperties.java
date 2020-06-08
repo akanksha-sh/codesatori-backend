@@ -1,11 +1,9 @@
 package uk.co.codesatori.backend.security.models;
 
 import java.util.List;
-
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
-import lombok.Data;
 
 @Component
 @ConfigurationProperties("security")

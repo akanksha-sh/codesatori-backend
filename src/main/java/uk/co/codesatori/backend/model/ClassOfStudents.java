@@ -1,7 +1,5 @@
 package uk.co.codesatori.backend.model;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;

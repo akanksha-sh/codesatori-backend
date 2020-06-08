@@ -33,18 +33,18 @@ public class ClassOfStudentsController {
   }
 
   @PostMapping("/classes")
-  void addClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+  public void addClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
     /* TODO: shouldn't this only add if there's no entity with the id? */
     classOfStudentsRepository.save(classOfStudents);
   }
 
   @PutMapping("/classes")
-  void updateClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+  public void updateClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
     classOfStudentsRepository.save(classOfStudents);
   }
 
   @DeleteMapping("/classes/{id}")
-  void deleteClassOfStudents(@PathVariable UUID id) {
+  public void deleteClassOfStudents(@PathVariable UUID id) {
     classOfStudentsRepository.deleteById(id);
   }
 
