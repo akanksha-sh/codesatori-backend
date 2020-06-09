@@ -1,0 +1,27 @@
+variables:
+  VM_IP: "146.169.41.91:5080"
+  VM_DEPLOYMENT_PORT: "8090"
+  TIME_TO_LIVE_IN_SECONDS: "90"
+
+stages:
+  - build_and_test
+  - deploy-heroku
+
+before_script:
+  - docker info
+  - echo "$GOOGLE_APPLICATION_CREDENTIALS" > "cred.json"
+
+after_script:
+  - docker system prune -f --all
+
+build_and_test:
+  stage: build_and_test
+  script:
+    - docker build --target MAVEN_BUILD -t codesatori-backend .
+
+deploy-heroku:
+  stage: deploy-heroku
+  only:
+    - master
+  script:
+    - dpl --provider=heroku --app=codesatori-backend --api-key=$HEROKU_API_KEY
