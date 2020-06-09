@@ -43,13 +43,17 @@ public class UserController {
   }
 
   @PostMapping("/user")
-  public void addUser(@RequestBody User user) {
+  public void addUserFromFrontend(@RequestBody User user) {
     String uid = securityService.getUser().getUid();
     if (getUser(uid) != null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists in database");
     }
     user.setId(toUUID(uid));
     // TODO: check if the fields of user are input correctly
+    addUser(user);
+  }
+
+  public void addUser(User user) {
     userRepository.save(user);
   }
 
