@@ -27,7 +27,10 @@ public class ClassOfStudentsController {
     return classOfStudentsRepository.findById(id).orElse(null);
   }
 
-  @GetMapping("/classes")
+//  @GetMapping("/classes")
+//  public ClassOfStudents getExampleClass() {
+//    return new ClassOfStudents(UUID.nameUUIDFromBytes("hello".getBytes()), "Example",  UUID.nameUUIDFromBytes("yikes".getBytes()));
+//  }
   public Iterable<ClassOfStudents> getAllClassesOfStudents() {
     return classOfStudentsRepository.findAll();
   }
