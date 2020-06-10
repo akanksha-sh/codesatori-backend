@@ -91,7 +91,7 @@ public class CodeSatoriDataBaseIntegrationTest {
     /* Check that there is only one such class, i.e.: the one submitted. */
     assertThat(payload).hasSize(1);
     ClassOfStudents result = payload.get(0);
-    FIDDLE_STICKS.setClassId(result.getClassId());
+    FIDDLE_STICKS_CLASS.setClassId(result.getClassId());
     assertThat(result).isEqualTo(FIDDLE_STICKS_CLASS);
 
     /* Remove class from database and check to see that this operation has been successful. */
