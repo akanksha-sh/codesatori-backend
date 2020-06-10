@@ -1,6 +1,7 @@
 package uk.co.codesatori.backend.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CollectionTable;
@@ -52,5 +53,25 @@ public class ClassOfStudents {
   }
 
   public ClassOfStudents() {
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    } else if (obj instanceof ClassOfStudents) {
+      ClassOfStudents that = (ClassOfStudents) obj;
+      return Objects.equals(this.classId, that.classId) &&
+          Objects.equals(this.name, that.name) &&
+          Objects.equals(this.teacherId, that.teacherId) &&
+          Objects.equals(this.studentIds, that.studentIds) &&
+          Objects.equals(this.assignmentIds, that.assignmentIds);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(classId, name, teacherId, studentIds, assignmentIds);
   }
 }
