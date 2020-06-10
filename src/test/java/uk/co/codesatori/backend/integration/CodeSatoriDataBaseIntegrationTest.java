@@ -79,6 +79,13 @@ public class CodeSatoriDataBaseIntegrationTest {
 
   @Test
   public void integratesSuccessfullyWithClassOfStudentsRepository() {
+    /* Attempt to destroy data from previous integration tests. */
+    StreamSupport
+        .stream(classOfStudentsRepository.findAll().spliterator(), false)
+        .filter(classOfStudents -> classOfStudents.getTeacherId().equals(FIDDLE_STICKS.getId()))
+        .forEach(classOfStudents -> classOfStudentsRepository
+            .deleteById(classOfStudents.getTeacherId()));
+
     /* Add a new class to the database. */
     classOfStudentsRepository.save(FIDDLE_STICKS_CLASS);
 
