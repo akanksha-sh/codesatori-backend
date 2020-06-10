@@ -19,11 +19,7 @@ public class UserController {
   @Autowired
   SecurityService securityService;
 
-
   private final UserRepository userRepository;
-
-  @Autowired
-  SecurityService securityService;
 
   @Autowired
   public UserController(UserRepository userRepository) {
@@ -36,13 +32,14 @@ public class UserController {
     return userRepository.findById(User.FirebaseUUID.toUUID(id)).orElse(null);
   }
 
+  // Only allows the user to edit his own details
   @PostMapping("/user")
   public void addUserFromFrontend(@RequestBody User user) {
     String uid = securityService.getUser().getUid();
     if (getUser(uid) != null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists in database");
     }
-    user.setId(toUUID(uid));
+    user.setId(User.FirebaseUUID.toUUID(uid));
     // TODO: check if the fields of user are input correctly
     addUser(user);
   }
