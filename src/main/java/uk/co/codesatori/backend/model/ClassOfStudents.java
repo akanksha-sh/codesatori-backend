@@ -7,11 +7,13 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "classes_of_students")
@@ -20,8 +22,16 @@ import lombok.Setter;
 public class ClassOfStudents {
 
   @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(
+      name = "UUID",
+      strategy = "org.hibernate.id.UUIDGenerator"
+  )
+  @Column(updatable = false, nullable = false)
   private UUID classId;
+  @Column(nullable = false)
   private String name;
+  @Column(nullable = false)
   private UUID teacherId;
 
   @ElementCollection

@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.repositories.UserRepository;
+import uk.co.codesatori.backend.security.SecurityService;
 
 public class UserControllerTest {
 
@@ -27,14 +28,19 @@ public class UserControllerTest {
   @Mock
   private UserRepository userRepository;
 
+  @Mock
+  private SecurityService securityService;
+
   @Before
   public void init() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test
-  public void addingUsersSavesThemToRepo() {
-    userController.addUser(MR_WILLIAMS);
+  public void signingUpNewUsersSavesThemToRepo() {
+    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+
+    userController.signUpNewUser(MR_WILLIAMS);
     verify(userRepository).save(MR_WILLIAMS);
   }
 
@@ -52,10 +58,8 @@ public class UserControllerTest {
     assertThat(payload1).isNotNull();
     assertThat(payload2).isNotNull();
 
-    assertThat(payload1.getRole()).isEqualTo(MR_WILLIAMS.getRole());
-    assertThat(payload1.getFirstName()).isEqualTo(MR_WILLIAMS.getFirstName());
-    assertThat(payload2.getRole()).isEqualTo(MR_MACLEOD.getRole());
-    assertThat(payload2.getFirstName()).isEqualTo(MR_MACLEOD.getFirstName());
+    assertThat(payload1).isEqualTo(MR_WILLIAMS);
+    assertThat(payload2).isEqualTo(MR_MACLEOD);
   }
 
 //  @Test

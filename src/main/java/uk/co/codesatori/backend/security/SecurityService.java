@@ -1,11 +1,13 @@
 package uk.co.codesatori.backend.security;
 
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import uk.co.codesatori.backend.model.User.FirebaseUUID;
 import uk.co.codesatori.backend.security.models.Credentials;
 import uk.co.codesatori.backend.security.models.SecurityProperties;
 import uk.co.codesatori.backend.security.models.User;
@@ -22,6 +24,11 @@ public class SecurityService {
 
   @Autowired
   SecurityProperties securityProps;
+
+  public UUID getCurrentUUID() {
+    User user = getUser();
+    return user != null ? FirebaseUUID.toUUID(user.getUid()) : null;
+  }
 
   public User getUser() {
     User userPrincipal = null;
