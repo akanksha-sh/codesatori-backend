@@ -41,7 +41,7 @@ public class ClassOfStudents {
   @Column(name = "student_id")
   private Set<UUID> studentIds = new HashSet<>();
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "class_to_assignment_mapping", joinColumns = @JoinColumn(name = "class_id"))
   @Column(name = "assignment_id")
   private Set<UUID> assignmentIds = new HashSet<>();
