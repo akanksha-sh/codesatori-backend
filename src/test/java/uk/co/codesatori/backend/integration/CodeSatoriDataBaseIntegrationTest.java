@@ -5,8 +5,11 @@ import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_1;
 import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
 import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_3;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,8 +79,26 @@ public class CodeSatoriDataBaseIntegrationTest {
 
   @Test
   public void integratesSuccessfullyWithClassOfStudentsRepository() {
-    integratesSuccessfullyWithRepository(classOfStudentsRepository, FIDDLE_STICKS_CLASS,
-        FIDDLE_STICKS_CLASS.getClassId());
+    /* Add a new class to the database. */
+    classOfStudentsRepository.save(FIDDLE_STICKS_CLASS);
+
+    /* Get all classes taught by the teacher of the class just saved. */
+    List<ClassOfStudents> payload = StreamSupport
+        .stream(classOfStudentsRepository.findAll().spliterator(), false)
+        .filter(classOfStudents -> classOfStudents.getTeacherId().equals(FIDDLE_STICKS.getId()))
+        .collect(Collectors.toList());
+
+    /* Check that there is only one such class, i.e.: the one submitted. */
+    assertThat(payload).hasSize(1);
+    ClassOfStudents result = payload.get(0);
+    FIDDLE_STICKS.setClassId(result.getClassId());
+    assertThat(result).isEqualTo(FIDDLE_STICKS_CLASS);
+
+    /* Remove class from database and check to see that this operation has been successful. */
+    classOfStudentsRepository.deleteById(result.getClassId());
+    Optional<ClassOfStudents> emptyPayload = classOfStudentsRepository
+        .findById(result.getClassId());
+    assertThat(emptyPayload.isEmpty()).isTrue();
   }
 }
 
