@@ -8,6 +8,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -35,7 +36,7 @@ public class ClassOfStudents {
   @Column(nullable = false)
   private UUID teacherId;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "class_to_student_mapping", joinColumns = @JoinColumn(name = "class_id"))
   @Column(name = "student_id")
   private Set<UUID> studentIds = new HashSet<>();
