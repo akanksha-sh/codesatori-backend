@@ -1,10 +1,26 @@
 package uk.co.codesatori.backend.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.MR_WILLIAMS;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_1;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_3;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_4;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
+import uk.co.codesatori.backend.repositories.UserRepository;
+import uk.co.codesatori.backend.security.SecurityService;
 
 public class ClassOfStudentsControllerTest {
 
@@ -14,58 +30,47 @@ public class ClassOfStudentsControllerTest {
   @Mock
   private ClassOfStudentsRepository classOfStudentsRepository;
 
+  @Mock
+  private UserRepository userRepository;
+
+  @Mock
+  private SecurityService securityService;
+
   @Before
   public void init() {
     MockitoAnnotations.initMocks(this);
   }
 
-//  private static ClassOfStudents MR_WILLIAMS_CLASS = new ClassOfStudents(
-//      UUID_3,
-//      "Mr Williams' Class",
-//      UUID_1,
-//      studentsIds);
-//
-//  private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
-//      UUID_4,
-//      "Mr Macleod's Class",
-//      UUID_2,
-//      studentsIds);
-//
-//  @Test
-//  public void addingAndUpdatingClassSavesThemToRepo() {
-//    classOfStudentsController.addClassOfStudents(MR_WILLIAMS_CLASS);
-//    classOfStudentsController.updateClassOfStudents(MR_MACLEOD_CLASS);
-//
-//    verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
-//    verify(classOfStudentsRepository).save(MR_MACLEOD_CLASS);
-//  }
-//
-//  @Test
-//  public void getsClassWithTheCorrectUUID() {
-//    when(classOfStudentsRepository.findById(UUID_1)).thenReturn(Optional.of(MR_WILLIAMS_CLASS));
-//    when(classOfStudentsRepository.findById(UUID_3)).thenReturn(Optional.of(MR_MACLEOD_CLASS));
-//
-//    ClassOfStudents payload1 = classOfStudentsController.getClassOfStudents(UUID_1);
-//    ClassOfStudents payload2 = classOfStudentsController.getClassOfStudents(UUID_3);
-//
-//    verify(classOfStudentsRepository).findById(UUID_1);
-//    verify(classOfStudentsRepository).findById(UUID_3);
-//
-//    assertThat(payload1).isNotNull();
-//    assertThat(payload2).isNotNull();
-//
-//    assertThat(payload1.getClassId()).isEqualTo(UUID_3);
-//    assertThat(payload1.getTeacherId()).isEqualTo(UUID_1);
-//    assertThat(payload2.getClassId()).isEqualTo(UUID_4);
-//    assertThat(payload2.getTeacherId()).isEqualTo(UUID_2);
-//  }
-//
-//  @Test
-//  public void deletesClassWithTheCorrectUUID() {
-//    classOfStudentsController.deleteClassOfStudents(UUID_1);
-//    classOfStudentsController.deleteClassOfStudents(UUID_3);
-//
-//    verify(classOfStudentsRepository).deleteById(UUID_1);
-//    verify(classOfStudentsRepository).deleteById(UUID_3);
-//  }
+  private static ClassOfStudents MR_WILLIAMS_CLASS = new ClassOfStudents(
+      UUID_3,
+      "Mr Williams' Class",
+      UUID_1,
+      Collections.EMPTY_SET);
+
+  private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
+      UUID_4,
+      "Mr Macleod's Class",
+      UUID_2,
+      Collections.EMPTY_SET);
+
+  @Test
+  public void getsClassWithTheCorrectUUID() {
+    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
+    when(classOfStudentsRepository.findAll())
+        .thenReturn(List.of(MR_WILLIAMS_CLASS, MR_MACLEOD_CLASS));
+
+    List<ClassOfStudents> payload = classOfStudentsController.getClassesOfStudents();
+    assertThat(payload).isEqualTo(List.of(MR_WILLIAMS_CLASS));
+  }
+
+  @Test
+  public void creatingNewClassesSavesThemToRepo() {
+    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
+
+    ClassOfStudents payload = classOfStudentsController.createNewClassOfStudents(MR_WILLIAMS_CLASS);
+    verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
+    assertThat(payload).isEqualTo(MR_WILLIAMS_CLASS);
+  }
 }

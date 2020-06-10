@@ -8,6 +8,8 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.ClassOfStudents;
@@ -30,7 +32,7 @@ public class ClassOfStudentsController {
   private UserRepository userRepository;
 
   @GetMapping("/classes")
-  public List<ClassOfStudents> getClassOfStudentsByTeacher() {
+  public List<ClassOfStudents> getClassesOfStudents() {
     /* Get UUID for the user who made this request.
      * Then probe the user details database to check that the user is actually a teacher. */
     UUID teacherId = securityService.getCurrentUUID();
@@ -46,5 +48,23 @@ public class ClassOfStudentsController {
     return StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
         .filter(classOfStudents -> classOfStudents.getTeacherId().equals(teacherId))
         .collect(Collectors.toList());
+  }
+
+  @PostMapping("/classes")
+  public ClassOfStudents createNewClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+    /* Get UUID for the user who made this request.
+     * Then probe the user details database to check that the user is actually a teacher. */
+    UUID teacherId = securityService.getCurrentUUID();
+    Optional<User> user = userRepository.findById(teacherId);
+
+    /* If the user does not exist in the database, or is not a teacher, throw an error. */
+    if (user.isEmpty() || !user.get().getRoleAsEnum().equals(ROLE.TEACHER)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Only teachers can create classes.");
+    }
+
+    /* Otherwise, add new class to the database and return to user. */
+    classOfStudentsRepository.save(classOfStudents);
+    return classOfStudents;
   }
 }
