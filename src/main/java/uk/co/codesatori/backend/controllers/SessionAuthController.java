@@ -54,7 +54,6 @@ public class SessionAuthController {
     }
     cookieUtils.deleteSecureCookie("session");
     cookieUtils.deleteCookie("authenticated");
-
   }
 
 }

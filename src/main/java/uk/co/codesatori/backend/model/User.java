@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "USER_DETAILS")
+@Table(name = "user_details")
 @Getter
 @Setter
 public class User {
@@ -44,6 +44,13 @@ public class User {
         default:
           throw new UnsupportedOperationException("This ROLE has no value.");
       }
+    }
+  }
+
+  public static class FirebaseUUID {
+
+    public static UUID toUUID(String firebaseId) {
+      return UUID.nameUUIDFromBytes(firebaseId.getBytes());
     }
   }
 }

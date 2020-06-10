@@ -33,12 +33,9 @@ public class UserControllerTest {
   }
 
   @Test
-  public void addingAndUpdatingUsersSavesThemToRepo() {
+  public void addingUsersSavesThemToRepo() {
     userController.addUser(MR_WILLIAMS);
-    userController.updateUser(MR_MACLEOD);
-
     verify(userRepository).save(MR_WILLIAMS);
-    verify(userRepository).save(MR_MACLEOD);
   }
 
   @Test
@@ -61,12 +58,12 @@ public class UserControllerTest {
     assertThat(payload2.getFirstName()).isEqualTo(MR_MACLEOD.getFirstName());
   }
 
-  @Test
-  public void deletesClassWithTheCorrectUUID() {
-    userController.deleteUser(FIREBASE_UUID_1);
-    userController.deleteUser(FIREBASE_UUID_2);
-
-    verify(userRepository).deleteById(UUID_1);
-    verify(userRepository).deleteById(UUID_2);
-  }
+//  @Test
+//  public void deletesClassWithTheCorrectUUID() {
+//    userController.deleteUser(FIREBASE_UUID_1);
+//    userController.deleteUser(FIREBASE_UUID_2);
+//
+//    verify(userRepository).deleteById(UUID_1);
+//    verify(userRepository).deleteById(UUID_2);
+//  }
 }
