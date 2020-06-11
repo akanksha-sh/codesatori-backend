@@ -18,10 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import uk.co.codesatori.backend.CodeSatoriBackEndApplication;
 import uk.co.codesatori.backend.model.Assignment;
+import uk.co.codesatori.backend.model.AssignmentStatus;
 import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
+import uk.co.codesatori.backend.repositories.AssignmentStatusRepository;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
@@ -37,6 +39,9 @@ public class CodeSatoriDataBaseIntegrationTest {
 
   @Autowired
   private AssignmentRepository assignmentRepository;
+
+  @Autowired
+  private AssignmentStatusRepository assignmentStatusRepository;
 
   private static User FIDDLE_STICKS = new User(
       UUID_1,
@@ -56,14 +61,19 @@ public class CodeSatoriDataBaseIntegrationTest {
       "Mr Sticks' Class",
       UUID_1,
       Set.of(UUID_2),
-      Set.of(new ClassOfStudents.AssignmentDeadline(UUID_4, Timestamp.valueOf(LocalDateTime.now())))
+      Collections.EMPTY_SET
   );
 
   private static Assignment FIDDLE_STICKS_ASSIGNMENT = new Assignment(
       "How to Stand Still",
       UUID_1,
-      Collections.EMPTY_MAP
+      Collections.EMPTY_MAP,
+      Collections.EMPTY_SET
   );
+
+
+  private static AssignmentStatus FIDDLE_STICKS_ASSIGNMENT_STATUS = new AssignmentStatus(
+      FIDDLE_STICKS_CLASS.getClassId(), FIDDLE_STICKS_ASSIGNMENT.getAssignmentId(), Timestamp.valueOf(LocalDateTime.now()), 0);
 
   @Test
   public void integratesSuccessfullyWithUserRepository() {

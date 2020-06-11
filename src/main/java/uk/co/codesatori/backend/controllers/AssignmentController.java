@@ -23,11 +23,22 @@ public class AssignmentController {
   @Autowired
   private AssignmentRepository assignmentRepository;
 
-  @GetMapping("/assignments")
-  public List<Assignment> getAssignments() {
+  @GetMapping("/assignments/student")
+  public List<Assignment> getAssignmentsForStudentDashboard() {
+    /* Verify that request has come from a student. */
+    UUID studentId = securityService
+        .verifyUserRole(Role.STUDENT, "This channel is for students only.");
+    /* Filter the database entries based on the given id. */
+    return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
+        .filter(assignment -> assignment.getTeacherId().equals(studentId))
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/assignments/teacher")
+  public List<Assignment> getAssignmentsForTeacherDashboard() {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService
-        .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
+        .verifyUserRole(Role.TEACHER, "This channel is for teachers only.");
     /* Filter the database entries based on the given id. */
     return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
         .filter(assignment -> assignment.getTeacherId().equals(teacherId))
