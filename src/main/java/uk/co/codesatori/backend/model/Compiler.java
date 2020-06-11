@@ -70,7 +70,8 @@ public class Compiler {
       File source;
       try {
         /* Create a temporary source file for the code to be compiled. */
-        Path temporaryDirectory = Files.createTempDirectory(String.format("Lang=%s_User=%s", language(), uuid));
+        Path temporaryDirectory = Files
+            .createTempDirectory(String.format("Lang=%s_User=%s", language(), uuid));
         String sourcePath = temporaryDirectory.resolve(language().file()).toString();
         source = new File(sourcePath);
 

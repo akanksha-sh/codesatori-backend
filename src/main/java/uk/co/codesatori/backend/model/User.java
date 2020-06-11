@@ -71,7 +71,7 @@ public class User {
           return role;
         }
       }
-      throw new UnsupportedOperationException("There is no role corresponding to " + value + ".");
+      throw new UnsupportedOperationException("There is no ROLE corresponding to " + value + ".");
     }
 
     public int value() {
@@ -81,8 +81,7 @@ public class User {
         case TEACHER:
           return 1;
         default:
-          throw new UnsupportedOperationException(
-              "There is no value corresponding to " + this + ".");
+          throw new UnsupportedOperationException("This ROLE has no value.");
       }
     }
   }

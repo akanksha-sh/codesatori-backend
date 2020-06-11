@@ -23,14 +23,25 @@ public class ClassOfStudentsController {
   @Autowired
   private ClassOfStudentsRepository classOfStudentsRepository;
 
-  @GetMapping("/classes")
-  public List<ClassOfStudents> getClassesOfStudents() {
-    /* Verify that request has come from a teacher. */
-    UUID teacherId = securityService
-        .verifyUserRole(Role.TEACHER, "Only teachers can create classes.");
+  @GetMapping("/classes/student")
+  public List<ClassOfStudents> getClassesOfStudentsForStudentDashboard() {
+    /* Verify that request has come from a student. */
+    UUID studentId = securityService
+        .verifyUserRole(Role.STUDENT, "This channel is for students only.");
     /* Filter the database entries based on the given id. */
     return StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
-        .filter(classOfStudents -> classOfStudents.getTeacherId().equals(teacherId))
+        .filter(classOfStudents -> classOfStudents.containsStudentWithId(studentId))
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/classes/teacher")
+  public List<ClassOfStudents> getClassesOfStudentsForTeacherDashboard() {
+    /* Verify that request has come from a teacher. */
+    UUID teacherId = securityService
+        .verifyUserRole(Role.TEACHER, "This channel is for teachers only.");
+    /* Filter the database entries based on the given id. */
+    return StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
+        .filter(classOfStudents -> classOfStudents.isTaughtByTeacherWithId(teacherId))
         .collect(Collectors.toList());
   }
 

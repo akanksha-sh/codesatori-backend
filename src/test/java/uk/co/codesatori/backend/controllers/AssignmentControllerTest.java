@@ -43,24 +43,26 @@ public class AssignmentControllerTest {
   private static Assignment MR_WILLIAMS_ASSIGNMENT = new Assignment(
       "Mr Williams' Assignment",
       UUID_1,
-      Collections.EMPTY_MAP
+      Collections.EMPTY_MAP,
+      Collections.EMPTY_SET
   );
 
   private static Assignment MR_MACLEOD_ASSIGNMENT = new Assignment(
       "Mr Macleod's Assignment",
       UUID_2,
-      Collections.EMPTY_MAP
+      Collections.EMPTY_MAP,
+      Collections.EMPTY_SET
   );
 
   @Test
   public void getsAssignmentWithTheCorrectUUID() {
-    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create assignments."))
+    when(securityService.verifyUserRole(Role.TEACHER, "This channel is for teachers only."))
         .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
     when(assignmentRepository.findAll())
         .thenReturn(List.of(MR_WILLIAMS_ASSIGNMENT, MR_MACLEOD_ASSIGNMENT));
 
-    List<Assignment> payload = assignmentController.getAssignments();
+    List<Assignment> payload = assignmentController.getAssignmentsForTeacherDashboard();
     assertThat(payload).isEqualTo(List.of(MR_WILLIAMS_ASSIGNMENT));
   }
 

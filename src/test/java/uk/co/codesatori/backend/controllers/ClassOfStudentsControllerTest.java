@@ -54,13 +54,14 @@ public class ClassOfStudentsControllerTest {
 
   @Test
   public void getsClassWithTheCorrectUUID() {
-    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create classes."))
+    when(securityService.verifyUserRole(Role.TEACHER, "This channel is for teachers only."))
         .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
     when(classOfStudentsRepository.findAll())
         .thenReturn(List.of(MR_WILLIAMS_CLASS, MR_MACLEOD_CLASS));
 
-    List<ClassOfStudents> payload = classOfStudentsController.getClassesOfStudents();
+    List<ClassOfStudents> payload = classOfStudentsController
+        .getClassesOfStudentsForTeacherDashboard();
     assertThat(payload).isEqualTo(List.of(MR_WILLIAMS_CLASS));
   }
 
