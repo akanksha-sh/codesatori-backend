@@ -2,7 +2,7 @@ package uk.co.codesatori.backend;
 
 import java.util.UUID;
 import uk.co.codesatori.backend.model.User;
-import uk.co.codesatori.backend.model.User.ROLE;
+import uk.co.codesatori.backend.model.User.Role;
 
 public class CodeSatoriTestUtils {
 
@@ -20,7 +20,7 @@ public class CodeSatoriTestUtils {
       UUID_1,
       "Eliot",
       "Williams",
-      ROLE.TEACHER.value()
+      Role.TEACHER.value()
 
   );
 
@@ -28,7 +28,7 @@ public class CodeSatoriTestUtils {
       UUID_2,
       "Graham",
       "Macleod",
-      ROLE.TEACHER.value()
+      Role.TEACHER.value()
   );
 
 }

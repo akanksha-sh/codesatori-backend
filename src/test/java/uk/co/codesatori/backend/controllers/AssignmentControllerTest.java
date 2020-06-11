@@ -15,18 +15,19 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.co.codesatori.backend.model.Assignment;
 import uk.co.codesatori.backend.model.ClassOfStudents;
-import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
+import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.repositories.UserRepository;
 import uk.co.codesatori.backend.security.SecurityService;
 
-public class ClassOfStudentsControllerTest {
+public class AssignmentControllerTest {
 
   @InjectMocks
-  private ClassOfStudentsController classOfStudentsController;
+  private AssignmentController assignmentController;
 
   @Mock
-  private ClassOfStudentsRepository classOfStudentsRepository;
+  private AssignmentRepository assignmentRepository;
 
   @Mock
   private UserRepository userRepository;
@@ -39,36 +40,36 @@ public class ClassOfStudentsControllerTest {
     MockitoAnnotations.initMocks(this);
   }
 
-  private static ClassOfStudents MR_WILLIAMS_CLASS = new ClassOfStudents(
-      "Mr Williams' Class",
+  private static Assignment MR_WILLIAMS_ASSIGNMENT = new Assignment(
+      "Mr Williams' Assignment",
       UUID_1,
-      Collections.EMPTY_SET,
-      Collections.EMPTY_SET);
+      Collections.EMPTY_MAP
+  );
 
-  private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
-      "Mr Macleod's Class",
+  private static Assignment MR_MACLEOD_ASSIGNMENT = new Assignment(
+      "Mr Macleod's Assignment",
       UUID_2,
-      Collections.EMPTY_SET,
-      Collections.EMPTY_SET);
+      Collections.EMPTY_MAP
+  );
 
   @Test
-  public void getsClassWithTheCorrectUUID() {
+  public void getsAssignmentWithTheCorrectUUID() {
     when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
-    when(classOfStudentsRepository.findAll())
-        .thenReturn(List.of(MR_WILLIAMS_CLASS, MR_MACLEOD_CLASS));
+    when(assignmentRepository.findAll())
+        .thenReturn(List.of(MR_WILLIAMS_ASSIGNMENT, MR_MACLEOD_ASSIGNMENT));
 
-    List<ClassOfStudents> payload = classOfStudentsController.getClassesOfStudents();
-    assertThat(payload).isEqualTo(List.of(MR_WILLIAMS_CLASS));
+    List<Assignment> payload = assignmentController.getAssignments();
+    assertThat(payload).isEqualTo(List.of(MR_WILLIAMS_ASSIGNMENT));
   }
 
   @Test
-  public void creatingNewClassesSavesThemToRepo() {
+  public void creatingNewAssignmentsSavesThemToRepo() {
     when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
 
-    ClassOfStudents payload = classOfStudentsController.createNewClassOfStudents(MR_WILLIAMS_CLASS);
-    verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
-    assertThat(payload).isEqualTo(MR_WILLIAMS_CLASS);
+    Assignment payload = assignmentController.createNewAssignment(MR_WILLIAMS_ASSIGNMENT);
+    verify(assignmentRepository).save(MR_WILLIAMS_ASSIGNMENT);
+    assertThat(payload).isEqualTo(MR_WILLIAMS_ASSIGNMENT);
   }
 }

@@ -3,8 +3,11 @@ package uk.co.codesatori.backend.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_1;
 import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
-import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_3;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_4;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,11 +16,12 @@ import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.repository.CrudRepository;
 import uk.co.codesatori.backend.CodeSatoriBackEndApplication;
+import uk.co.codesatori.backend.model.Assignment;
 import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.model.User;
-import uk.co.codesatori.backend.model.User.ROLE;
+import uk.co.codesatori.backend.model.User.Role;
+import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
 import uk.co.codesatori.backend.repositories.UserRepository;
 
@@ -31,50 +35,54 @@ public class CodeSatoriDataBaseIntegrationTest {
   @Autowired
   private ClassOfStudentsRepository classOfStudentsRepository;
 
+  @Autowired
+  private AssignmentRepository assignmentRepository;
+
   private static User FIDDLE_STICKS = new User(
       UUID_1,
       "Fiddle",
       "Sticks",
-      ROLE.TEACHER.value()
+      Role.TEACHER.value()
   );
 
   private static User THE_BANDITO = new User(
       UUID_2,
       "The",
       "Bandito",
-      ROLE.STUDENT.value()
+      Role.STUDENT.value()
   );
 
   private static ClassOfStudents FIDDLE_STICKS_CLASS = new ClassOfStudents(
-      UUID_3,
       "Mr Sticks' Class",
       UUID_1,
-      Set.of(UUID_2)
+      Set.of(UUID_2),
+      Set.of(new ClassOfStudents.AssignmentDeadline(UUID_4, Timestamp.valueOf(LocalDateTime.now())))
   );
 
-  public <TData, TID> void integratesSuccessfullyWithRepository(
-      CrudRepository<TData, TID> repository, TData datum, TID id) {
-    /* Remove any existing data with conflicting UUID.
-     * (These UUIDs are reserved for testing, so should not interfere with any actual data) */
-    repository.delete(datum);
-
-    /* Demand a payload from said database and check to see that the request failed. */
-    Optional<TData> payload = repository.findById(id);
-    assertThat(payload.isEmpty()).isTrue();
-
-    /* Save a dummy datum to the actual database. */
-    repository.save(datum);
-
-    /* Demand a payload from said database and check to see if it matches the datum just saved. */
-    payload = repository.findById(id);
-    assertThat(payload.isPresent()).isTrue();
-    TData result = payload.get();
-    assertThat(result).isEqualTo(datum);
-  }
+  private static Assignment FIDDLE_STICKS_ASSIGNMENT = new Assignment(
+      "How to Stand Still",
+      UUID_1,
+      Collections.EMPTY_MAP
+  );
 
   @Test
   public void integratesSuccessfullyWithUserRepository() {
-    integratesSuccessfullyWithRepository(userRepository, FIDDLE_STICKS, FIDDLE_STICKS.getId());
+    /* Remove any existing users with conflicting UUID.
+     * (These UUIDs are reserved for testing, so should not interfere with any actual data) */
+    userRepository.delete(FIDDLE_STICKS);
+
+    /* Demand a payload from said database and check to see that the request failed. */
+    Optional<User> payload = userRepository.findById(FIDDLE_STICKS.getId());
+    assertThat(payload.isEmpty()).isTrue();
+
+    /* Save a dummy user to the actual database. */
+    userRepository.save(FIDDLE_STICKS);
+
+    /* Demand a payload from user database and check to see if it matches the user just saved. */
+    payload = userRepository.findById(FIDDLE_STICKS.getId());
+    assertThat(payload.isPresent()).isTrue();
+    User result = payload.get();
+    assertThat(result).isEqualTo(FIDDLE_STICKS);
   }
 
   @Test
@@ -105,6 +113,37 @@ public class CodeSatoriDataBaseIntegrationTest {
     classOfStudentsRepository.deleteById(result.getClassId());
     Optional<ClassOfStudents> emptyPayload = classOfStudentsRepository
         .findById(result.getClassId());
+    assertThat(emptyPayload.isEmpty()).isTrue();
+  }
+
+  @Test
+  public void integratesSuccessfullyWithAssignmentRepository() {
+    /* Attempt to destroy data from previous integration tests. */
+    StreamSupport
+        .stream(assignmentRepository.findAll().spliterator(), false)
+        .filter(assignment -> assignment.getTeacherId().equals(FIDDLE_STICKS.getId()))
+        .forEach(assignment -> assignmentRepository
+            .deleteById(assignment.getTeacherId()));
+
+    /* Add a new assignment to the database. */
+    assignmentRepository.save(FIDDLE_STICKS_ASSIGNMENT);
+
+    /* Get all assignments set by the teacher of the assignment just saved. */
+    List<Assignment> payload = StreamSupport
+        .stream(assignmentRepository.findAll().spliterator(), false)
+        .filter(assignment -> assignment.getTeacherId().equals(FIDDLE_STICKS.getId()))
+        .collect(Collectors.toList());
+
+    /* Check that there is only one such assignment, i.e.: the one submitted. */
+    assertThat(payload).hasSize(1);
+    Assignment result = payload.get(0);
+    FIDDLE_STICKS_ASSIGNMENT.setAssignmentId(result.getClassId());
+    assertThat(result).isEqualTo(FIDDLE_STICKS_ASSIGNMENT);
+
+    /* Remove assignment from database and check to see that this operation has been successful. */
+    assignmentRepository.deleteById(result.getAssignmentId());
+    Optional<ClassOfStudents> emptyPayload = assignmentRepository
+        .findById(result.getAssignmentId());
     assertThat(emptyPayload.isEmpty()).isTrue();
   }
 }

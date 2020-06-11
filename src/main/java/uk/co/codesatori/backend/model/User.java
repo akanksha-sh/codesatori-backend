@@ -37,8 +37,8 @@ public class User {
   public User() {
   }
 
-  public ROLE getRoleAsEnum() {
-    return ROLE.of(role);
+  public Role getRoleAsEnum() {
+    return Role.of(role);
   }
 
   @Override
@@ -60,13 +60,13 @@ public class User {
     return Objects.hash(id, firstName, lastName, role);
   }
 
-  public enum ROLE {
+  public enum Role {
     STUDENT,
     TEACHER;
 
-    public static ROLE of(int value) {
-      List<ROLE> roles = Arrays.asList(ROLE.values());
-      for (ROLE role : roles) {
+    public static Role of(int value) {
+      List<Role> roles = Arrays.asList(Role.values());
+      for (Role role : roles) {
         if (role.value() == value) {
           return role;
         }

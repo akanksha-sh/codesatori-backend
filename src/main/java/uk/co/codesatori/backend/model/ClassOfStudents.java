@@ -1,5 +1,6 @@
 package uk.co.codesatori.backend.model;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -7,12 +8,14 @@ import java.util.UUID;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -43,14 +46,14 @@ public class ClassOfStudents {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "class_to_assignment_mapping", joinColumns = @JoinColumn(name = "class_id"))
-  @Column(name = "assignment_id")
-  private Set<UUID> assignmentIds = new HashSet<>();
+  private Set<AssignmentDeadline> assignmentDeadlines = new HashSet<>();
 
-  public ClassOfStudents(UUID classId, String name, UUID teacherId, Set<UUID> studentsIds) {
-    this.classId = classId;
+  public ClassOfStudents(String name, UUID teacherId, Set<UUID> studentsIds,
+      Set<AssignmentDeadline> assignmentDeadlines) {
     this.name = name;
     this.teacherId = teacherId;
     this.studentIds = studentsIds;
+    this.assignmentDeadlines = assignmentDeadlines;
   }
 
   public ClassOfStudents() {
@@ -66,13 +69,48 @@ public class ClassOfStudents {
           Objects.equals(this.name, that.name) &&
           Objects.equals(this.teacherId, that.teacherId) &&
           Objects.equals(this.studentIds, that.studentIds) &&
-          Objects.equals(this.assignmentIds, that.assignmentIds);
+          Objects.equals(this.assignmentDeadlines, that.assignmentDeadlines);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(classId, name, teacherId, studentIds, assignmentIds);
+    return Objects.hash(classId, name, teacherId, studentIds, assignmentDeadlines);
+  }
+
+  @Embeddable
+  public static class AssignmentDeadline {
+
+    @NotNull
+    private UUID assignmentID;
+
+    @NotNull
+    private Timestamp deadline;
+
+    public AssignmentDeadline(@NotNull UUID assignmentID,
+        @NotNull Timestamp deadline) {
+      this.assignmentID = assignmentID;
+      this.deadline = deadline;
+    }
+
+    public AssignmentDeadline() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) {
+        return true;
+      } else if (obj instanceof AssignmentDeadline) {
+        AssignmentDeadline that = (AssignmentDeadline) obj;
+        return Objects.equals(this.assignmentID, that.assignmentID);
+      }
+      return false;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(assignmentID);
+    }
   }
 }

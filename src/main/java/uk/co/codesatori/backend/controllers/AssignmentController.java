@@ -9,39 +9,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.codesatori.backend.model.ClassOfStudents;
+import uk.co.codesatori.backend.model.Assignment;
 import uk.co.codesatori.backend.model.User.Role;
-import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
+import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.security.SecurityService;
 
 @RestController
-public class ClassOfStudentsController {
+public class AssignmentController {
 
   @Autowired
   private SecurityService securityService;
 
   @Autowired
-  private ClassOfStudentsRepository classOfStudentsRepository;
+  private AssignmentRepository assignmentRepository;
 
-  @GetMapping("/classes")
-  public List<ClassOfStudents> getClassesOfStudents() {
+  @GetMapping("/assignments")
+  public List<Assignment> getAssignments() {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService
-        .verifyUserRole(Role.TEACHER, "Only teachers can create classes.");
+        .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
     /* Filter the database entries based on the given id. */
-    return StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
-        .filter(classOfStudents -> classOfStudents.getTeacherId().equals(teacherId))
+    return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
+        .filter(assignment -> assignment.getTeacherId().equals(teacherId))
         .collect(Collectors.toList());
   }
 
-  @PostMapping("/classes")
-  public ClassOfStudents createNewClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+  @PostMapping("/assignments")
+  public Assignment createNewAssignment(@RequestBody Assignment assignment) {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService
-        .verifyUserRole(Role.TEACHER, "Only teachers can create classes.");
-    /* Add new class to the database and return to user. */
-    classOfStudents.setTeacherId(teacherId);
-    classOfStudentsRepository.save(classOfStudents);
-    return classOfStudents;
+        .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
+    /* Add new assignment to the database and return to user. */
+    assignment.setTeacherId(teacherId);
+    assignmentRepository.save(assignment);
+    return assignment;
   }
 }
