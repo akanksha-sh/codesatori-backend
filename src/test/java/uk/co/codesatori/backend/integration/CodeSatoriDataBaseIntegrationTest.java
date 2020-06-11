@@ -137,12 +137,12 @@ public class CodeSatoriDataBaseIntegrationTest {
     /* Check that there is only one such assignment, i.e.: the one submitted. */
     assertThat(payload).hasSize(1);
     Assignment result = payload.get(0);
-    FIDDLE_STICKS_ASSIGNMENT.setAssignmentId(result.getClassId());
+    FIDDLE_STICKS_ASSIGNMENT.setAssignmentId(result.getAssignmentId());
     assertThat(result).isEqualTo(FIDDLE_STICKS_ASSIGNMENT);
 
     /* Remove assignment from database and check to see that this operation has been successful. */
     assignmentRepository.deleteById(result.getAssignmentId());
-    Optional<ClassOfStudents> emptyPayload = assignmentRepository
+    Optional<Assignment> emptyPayload = assignmentRepository
         .findById(result.getAssignmentId());
     assertThat(emptyPayload.isEmpty()).isTrue();
   }

@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.co.codesatori.backend.model.Assignment;
-import uk.co.codesatori.backend.model.ClassOfStudents;
+import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.repositories.UserRepository;
 import uk.co.codesatori.backend.security.SecurityService;
@@ -54,7 +54,8 @@ public class AssignmentControllerTest {
 
   @Test
   public void getsAssignmentWithTheCorrectUUID() {
-    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create assignments."))
+        .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
     when(assignmentRepository.findAll())
         .thenReturn(List.of(MR_WILLIAMS_ASSIGNMENT, MR_MACLEOD_ASSIGNMENT));
@@ -65,7 +66,8 @@ public class AssignmentControllerTest {
 
   @Test
   public void creatingNewAssignmentsSavesThemToRepo() {
-    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create assignments."))
+        .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
 
     Assignment payload = assignmentController.createNewAssignment(MR_WILLIAMS_ASSIGNMENT);

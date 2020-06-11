@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.co.codesatori.backend.model.ClassOfStudents;
+import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
 import uk.co.codesatori.backend.repositories.UserRepository;
 import uk.co.codesatori.backend.security.SecurityService;
@@ -53,7 +54,8 @@ public class ClassOfStudentsControllerTest {
 
   @Test
   public void getsClassWithTheCorrectUUID() {
-    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create classes."))
+        .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
     when(classOfStudentsRepository.findAll())
         .thenReturn(List.of(MR_WILLIAMS_CLASS, MR_MACLEOD_CLASS));
@@ -64,7 +66,8 @@ public class ClassOfStudentsControllerTest {
 
   @Test
   public void creatingNewClassesSavesThemToRepo() {
-    when(securityService.getCurrentUUID()).thenReturn(MR_WILLIAMS.getId());
+    when(securityService.verifyUserRole(Role.TEACHER, "Only teachers can create classes."))
+        .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
 
     ClassOfStudents payload = classOfStudentsController.createNewClassOfStudents(MR_WILLIAMS_CLASS);
