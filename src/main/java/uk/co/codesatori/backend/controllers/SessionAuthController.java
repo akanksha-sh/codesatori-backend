@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.codesatori.backend.security.SecurityService;
-import uk.co.codesatori.backend.security.models.Credentials;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
+import uk.co.codesatori.backend.security.model.Credentials;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
 import uk.co.codesatori.backend.utils.CookieUtils;
 
 @RestController

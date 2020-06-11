@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
 
 @Configuration
 public class FirebaseConfig {

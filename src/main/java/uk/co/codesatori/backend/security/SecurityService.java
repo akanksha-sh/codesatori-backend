@@ -13,9 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.User.FirebaseUUID;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.UserRepository;
-import uk.co.codesatori.backend.security.models.Credentials;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
-import uk.co.codesatori.backend.security.models.User;
+import uk.co.codesatori.backend.security.model.Credentials;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
+import uk.co.codesatori.backend.security.model.User;
 import uk.co.codesatori.backend.utils.CookieUtils;
 
 @Service

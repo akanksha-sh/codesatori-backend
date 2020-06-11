@@ -16,9 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uk.co.codesatori.backend.security.models.Credentials;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
-import uk.co.codesatori.backend.security.models.User;
+import uk.co.codesatori.backend.security.model.Credentials;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
+import uk.co.codesatori.backend.security.model.User;
 import uk.co.codesatori.backend.utils.CookieUtils;
 
 @Component

@@ -1,5 +1,6 @@
 package uk.co.codesatori.backend;
 
+import java.util.Arrays;
 import java.util.UUID;
 import uk.co.codesatori.backend.model.User;
 import uk.co.codesatori.backend.model.User.Role;
@@ -31,4 +32,9 @@ public class CodeSatoriTestUtils {
       Role.TEACHER.value()
   );
 
+  public static String codify(String... linesOfCode) {
+    return Arrays.stream(linesOfCode)
+        .reduce((s1, s2) -> s1 + "\n" + s2)
+        .orElse("");
+  }
 }

@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
 
 @Configuration
 @EnableWebSecurity

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
-import uk.co.codesatori.backend.security.models.SecurityProperties;
+import uk.co.codesatori.backend.security.model.SecurityProperties;
 
 @Service
 public class CookieUtils {

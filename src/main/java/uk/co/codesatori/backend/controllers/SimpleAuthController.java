@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.codesatori.backend.security.SecurityService;
-import uk.co.codesatori.backend.security.models.User;
+import uk.co.codesatori.backend.security.model.User;
 
 @RestController
 public class SimpleAuthController {
