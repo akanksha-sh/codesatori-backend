@@ -59,6 +59,7 @@ public class CodeSatoriDataBaseIntegrationTest {
   private static ClassOfStudents FIDDLE_STICKS_CLASS = new ClassOfStudents(
       "Mr Sticks' Class",
       UUID_1,
+      true,
       Set.of(UUID_2),
       Collections.EMPTY_SET
   );

@@ -36,6 +36,8 @@ public class ClassOfStudents {
   private String name;
   @Column(nullable = false)
   private UUID teacherId;
+  @Column(nullable = false)
+  private boolean active;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "class_to_student_mapping", joinColumns = @JoinColumn(name = "class_id"))
@@ -46,10 +48,11 @@ public class ClassOfStudents {
   @JoinColumn(name = "class_id")
   private Set<AssignmentStatus> assignmentStatus = new HashSet<>();
 
-  public ClassOfStudents(String name, UUID teacherId, Set<UUID> studentsIds,
+  public ClassOfStudents(String name, UUID teacherId, boolean active, Set<UUID> studentsIds,
       Set<AssignmentStatus> assignmentStatus) {
     this.name = name;
     this.teacherId = teacherId;
+    this.active = active;
     this.studentIds = studentsIds;
     this.assignmentStatus = assignmentStatus;
   }

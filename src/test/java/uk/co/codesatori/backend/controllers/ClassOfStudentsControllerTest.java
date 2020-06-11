@@ -43,14 +43,18 @@ public class ClassOfStudentsControllerTest {
   private static ClassOfStudents MR_WILLIAMS_CLASS = new ClassOfStudents(
       "Mr Williams' Class",
       UUID_1,
+      true,
       Collections.EMPTY_SET,
-      Collections.EMPTY_SET);
+      Collections.EMPTY_SET
+  );
 
   private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
       "Mr Macleod's Class",
       UUID_2,
+      false,
       Collections.EMPTY_SET,
-      Collections.EMPTY_SET);
+      Collections.EMPTY_SET
+  );
 
   @Test
   public void getsClassWithTheCorrectUUID() {
