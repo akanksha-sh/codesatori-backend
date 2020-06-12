@@ -16,20 +16,23 @@ public class CodeSatoriTestUtils {
   public static UUID UUID_3 = UUID.fromString("031e376f-c89a-47b6-a380-8fc854d2b805");
   public static UUID UUID_4 = UUID.fromString("850426ff-f01c-425e-b9e9-d0dd77bd8a1f");
 
+  public static String EMAIL_1 = "williamseliot@edu.uk";
+  public static String EMAIL_2 = "grahammacleod@grh.com";
 
   public static User MR_WILLIAMS = new User(
       UUID_1,
       "Eliot",
       "Williams",
-      Role.TEACHER.value()
-
+      Role.TEACHER.value(),
+      EMAIL_1
   );
 
   public static User MR_MACLEOD = new User(
       UUID_2,
       "Graham",
       "Macleod",
-      Role.TEACHER.value()
+      Role.TEACHER.value(),
+      EMAIL_2
   );
 
   public static String codify(String... linesOfCode) {

@@ -48,6 +48,12 @@ public class ClassOfStudentsControllerTest {
       Collections.EMPTY_SET
   );
 
+  private static CreateClassRequest MR_WILLIAMS_CLASS_REQ = new CreateClassRequest(
+      "Mr Williams' Class",
+      UUID_1,
+      Collections.EMPTY_LIST
+  );
+
   private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
       "Mr Macleod's Class",
       UUID_2,
@@ -75,7 +81,7 @@ public class ClassOfStudentsControllerTest {
         .thenReturn(MR_WILLIAMS.getId());
     when(userRepository.findById(MR_WILLIAMS.getId())).thenReturn(Optional.of(MR_WILLIAMS));
 
-    ClassOfStudents payload = classOfStudentsController.createNewClassOfStudents(MR_WILLIAMS_CLASS);
+    ClassOfStudents payload = classOfStudentsController.createNewClassOfStudents(MR_WILLIAMS_CLASS_REQ);
     verify(classOfStudentsRepository).save(MR_WILLIAMS_CLASS);
     assertThat(payload).isEqualTo(MR_WILLIAMS_CLASS);
   }

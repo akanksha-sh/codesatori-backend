@@ -1,9 +1,11 @@
 package uk.co.codesatori.backend.controllers;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
+import uk.co.codesatori.backend.repositories.UserRepository;
 import uk.co.codesatori.backend.security.SecurityService;
 
 @RestController
@@ -22,6 +25,9 @@ public class ClassOfStudentsController {
 
   @Autowired
   private ClassOfStudentsRepository classOfStudentsRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @GetMapping("/classes/student")
   public List<ClassOfStudents> getClassesOfStudentsForStudentDashboard() {
@@ -46,12 +52,14 @@ public class ClassOfStudentsController {
   }
 
   @PostMapping("/classes")
-  public ClassOfStudents createNewClassOfStudents(@RequestBody ClassOfStudents classOfStudents) {
+  public ClassOfStudents createNewClassOfStudents(@RequestBody CreateClassRequest req) {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService
         .verifyUserRole(Role.TEACHER, "Only teachers can create classes.");
     /* Add new class to the database and return to user. */
-    classOfStudents.setTeacherId(teacherId);
+
+    req.setTeacherId(teacherId);
+    ClassOfStudents classOfStudents = req.getClassOfStudents();
     classOfStudentsRepository.save(classOfStudents);
     return classOfStudents;
   }

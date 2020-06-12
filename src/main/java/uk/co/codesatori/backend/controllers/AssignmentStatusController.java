@@ -20,7 +20,7 @@ public class AssignmentStatusController {
   @Autowired
   private AssignmentStatusRepository assignmentStatusRepository;
   
-  @PostMapping("/assignmentstatus/publish")
+  @PostMapping("/assignment/publish")
   public AssignmentStatus publish(@RequestBody AssignmentStatus assignmentStatus) {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService

@@ -1,8 +1,7 @@
 package uk.co.codesatori.backend.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_1;
-import static uk.co.codesatori.backend.CodeSatoriTestUtils.UUID_2;
+import static uk.co.codesatori.backend.CodeSatoriTestUtils.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -46,14 +45,16 @@ public class CodeSatoriDataBaseIntegrationTest {
       UUID_1,
       "Fiddle",
       "Sticks",
-      Role.TEACHER.value()
+      Role.TEACHER.value(),
+      EMAIL_1
   );
 
   private static User THE_BANDITO = new User(
       UUID_2,
       "The",
       "Bandito",
-      Role.STUDENT.value()
+      Role.STUDENT.value(),
+      EMAIL_2
   );
 
   private static ClassOfStudents FIDDLE_STICKS_CLASS = new ClassOfStudents(

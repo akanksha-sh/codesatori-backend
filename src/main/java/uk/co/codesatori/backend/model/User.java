@@ -26,12 +26,15 @@ public class User {
   private String lastName;
   @Column(nullable = false)
   private int role;
+  @Column(nullable = false)
+  private String email;
 
-  public User(UUID id, String firstName, String lastName, int role) {
+  public User(UUID id, String firstName, String lastName, int role, String email) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.role = role;
+    this.email = email;
   }
 
   public User() {
