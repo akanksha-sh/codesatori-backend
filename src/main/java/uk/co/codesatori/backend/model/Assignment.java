@@ -1,12 +1,8 @@
 package uk.co.codesatori.backend.model;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+
+import java.util.*;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -48,6 +44,14 @@ public class Assignment {
   @OneToMany
   @JoinColumn(name = "assignment_id")
   private Set<AssignmentStatus> assignmentStatus = new HashSet<>();
+
+  public Assignment(String name, UUID teacherId,
+                    Map<String, Object> assignmentTemplate) {
+    this.name = name;
+    this.teacherId = teacherId;
+    this.assignmentTemplate = assignmentTemplate;
+    this.assignmentStatus = Collections.emptySet();
+  }
 
   public Assignment(String name, UUID teacherId,
       Map<String, Object> assignmentTemplate, Set<AssignmentStatus> assignmentStatus) {

@@ -59,7 +59,7 @@ public class ClassOfStudentsController {
     /* Add new class to the database and return to user. */
 
     req.setTeacherId(teacherId);
-    ClassOfStudents classOfStudents = req.getClassOfStudents();
+    ClassOfStudents classOfStudents = req.getClassOfStudents(userRepository);
     classOfStudentsRepository.save(classOfStudents);
     return classOfStudents;
   }

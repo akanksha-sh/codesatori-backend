@@ -15,9 +15,6 @@ public class CreateClassRequest {
   private UUID teacherId;
   private List<String> emails = new ArrayList<>();
 
-  @Autowired
-  private UserRepository userRepository;
-
   public CreateClassRequest() {}
 
   public CreateClassRequest(String name, UUID teacherId, List<String> emails) {
@@ -26,7 +23,7 @@ public class CreateClassRequest {
     this.emails = emails;
   }
 
-  public ClassOfStudents getClassOfStudents() {
+  public ClassOfStudents getClassOfStudents(UserRepository userRepository) {
     Set<UUID> studentIds = new HashSet<>();
     emails.forEach(email -> {
       userRepository.findUserByEmail(email).ifPresent(user -> {
