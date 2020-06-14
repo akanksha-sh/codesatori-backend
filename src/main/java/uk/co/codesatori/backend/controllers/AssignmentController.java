@@ -5,11 +5,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.Assignment;
+import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.security.SecurityService;
@@ -54,5 +54,28 @@ public class AssignmentController {
     assignment.setTeacherId(teacherId);
     assignmentRepository.save(assignment);
     return assignment;
+  }
+
+  @DeleteMapping("/assignments/{id}")
+  public void deleteAssignment(@PathVariable String id) {
+    /* Verify that request has come from a teacher. */
+    UUID teacherId = securityService
+        .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
+    /* Add new assignment to the database and return to user. */
+
+    UUID assignmentId = UUID.fromString(id);
+
+    List<UUID> assignmentIdsByTeacher =
+        assignmentRepository
+            .findByTeacherId(teacherId)
+            .stream()
+            .map(Assignment::getAssignmentId)
+            .collect(Collectors.toList());
+
+    if (!assignmentIdsByTeacher.contains(assignmentId)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher does not own assignment he wishes to delete.");
+    }
+
+    assignmentRepository.deleteById(assignmentId);
   }
 }
