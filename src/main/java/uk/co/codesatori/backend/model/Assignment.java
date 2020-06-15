@@ -64,6 +64,15 @@ public class Assignment {
   public Assignment() {
   }
 
+//  public boolean isFor(UUID studentId) {
+//     for (AssignmentStatus as : assignmentStatus) {
+//       if (as.hasStudent(studentId)) {
+//         return true;
+//       }
+//     }
+//    return false;
+//  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

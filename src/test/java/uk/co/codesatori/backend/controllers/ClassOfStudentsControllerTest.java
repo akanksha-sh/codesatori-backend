@@ -51,15 +51,15 @@ public class ClassOfStudentsControllerTest {
   private static CreateClassRequest MR_WILLIAMS_CLASS_REQ = new CreateClassRequest(
       "Mr Williams' Class",
       UUID_1,
-      Collections.EMPTY_LIST
+      Collections.emptyList()
   );
 
   private static ClassOfStudents MR_MACLEOD_CLASS = new ClassOfStudents(
       "Mr Macleod's Class",
       UUID_2,
       false,
-      Collections.EMPTY_SET,
-      Collections.EMPTY_SET
+      Collections.emptySet(),
+      Collections.emptySet()
   );
 
   @Test

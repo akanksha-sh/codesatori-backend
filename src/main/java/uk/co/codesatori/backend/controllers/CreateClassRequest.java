@@ -30,6 +30,6 @@ public class CreateClassRequest {
         studentIds.add(user.getId());
       });
     });
-    return new ClassOfStudents(name, teacherId, true, studentIds, Collections.EMPTY_SET);
+    return new ClassOfStudents(name, teacherId, true, studentIds, Collections.emptySet());
   }
 }

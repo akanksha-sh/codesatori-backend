@@ -1,15 +1,20 @@
 package uk.co.codesatori.backend.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.Assignment;
 import uk.co.codesatori.backend.model.AssignmentStatus;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentStatusRepository;
+import uk.co.codesatori.backend.repositories.StudentSubmissionRepository;
 import uk.co.codesatori.backend.security.SecurityService;
+import uk.co.codesatori.backend.service.AssignmentStatusService;
 
 @RestController
 public class AssignmentStatusController {
@@ -18,7 +23,7 @@ public class AssignmentStatusController {
   private SecurityService securityService;
 
   @Autowired
-  private AssignmentStatusRepository assignmentStatusRepository;
+  private AssignmentStatusService assignmentStatusService;
   
   @PostMapping("/assignments/publish")
   public AssignmentStatus publish(@RequestBody AssignmentStatus assignmentStatus) {
@@ -26,7 +31,12 @@ public class AssignmentStatusController {
     UUID teacherId = securityService
         .verifyUserRole(Role.TEACHER, "Only teachers can publish assignments.");
     /* Add new assignment to the database and return to user. */
-    assignmentStatusRepository.save(assignmentStatus);
-    return assignmentStatus;
+    Optional<AssignmentStatus> output = assignmentStatusService.publish(assignmentStatus);
+    if (output.isPresent()) {
+      return output.get();
+    } else {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+          "Teacher either does not own this assignment, or does not have this class");
+    }
   }
 }

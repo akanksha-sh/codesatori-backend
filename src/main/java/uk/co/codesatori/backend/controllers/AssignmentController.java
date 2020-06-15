@@ -1,17 +1,21 @@
 package uk.co.codesatori.backend.controllers;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import uk.co.codesatori.backend.model.Assignment;
-import uk.co.codesatori.backend.model.ClassOfStudents;
+import uk.co.codesatori.backend.model.*;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
+import uk.co.codesatori.backend.repositories.AssignmentStatusRepository;
+import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
+import uk.co.codesatori.backend.repositories.StudentSubmissionRepository;
 import uk.co.codesatori.backend.security.SecurityService;
 
 @RestController
@@ -23,16 +27,29 @@ public class AssignmentController {
   @Autowired
   private AssignmentRepository assignmentRepository;
 
+  @Autowired
+  private StudentSubmissionRepository studentSubmissionRepository;
+
   @GetMapping("/assignments/student")
-  public List<Assignment> getAssignmentsForStudentDashboard() {
+  public List<AssignmentSubmissionPair> getAssignmentsForStudentDashboard() {
     /* Verify that request has come from a student. */
     UUID studentId = securityService
         .verifyUserRole(Role.STUDENT, "This channel is for students only.");
     /* Filter the database entries based on the given id. */
-    return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
-        .filter(assignment -> assignment.getTeacherId().equals(studentId))
-        .collect(Collectors.toList());
+
+    return studentSubmissionRepository
+            .findByStudentId(studentId)
+            .stream().map(submission -> {
+              Assignment assignment = assignmentRepository.findById(submission.getAssignmentId()).orElseThrow(IllegalStateException::new);
+              return new AssignmentSubmissionPair(assignment, submission);
+        }).collect(Collectors.toList());
+    
+//    return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
+//        .filter(assignment -> assignment.isFor(studentId))
+//        .collect(Collectors.toList());
   }
+
+
 
   @GetMapping("/assignments/teacher")
   public List<Assignment> getAssignmentsForTeacherDashboard() {
@@ -101,4 +118,5 @@ public class AssignmentController {
     assignmentRepository.save(retrievedAssignment);
     return retrievedAssignment;
   }
+
 }

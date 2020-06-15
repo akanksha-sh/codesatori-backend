@@ -2,15 +2,9 @@ package uk.co.codesatori.backend.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import java.util.*;
+import javax.persistence.*;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,15 +30,43 @@ public class AssignmentStatus {
   @Column(nullable = false)
   private int status;
 
-  public AssignmentStatus(UUID classId, UUID assignmentId, Timestamp deadline, int status) {
+//  // TODO: Remove this because this will make requests extremely large
+//  @OneToMany
+//  @JoinColumns({
+//    @JoinColumn(name = "class_id"),
+//    @JoinColumn(name = "assignment_id")
+//  })
+//  private Set<StudentSubmission> studentSubmissions;
+
+  public AssignmentStatus(UUID classId, UUID assignmentId, Timestamp deadline,
+                          int status) {
     this.classId = classId;
     this.assignmentId = assignmentId;
     this.deadline = deadline;
     this.status = status;
+//    this.studentSubmissions = Collections.emptySet();
+  }
+
+  public AssignmentStatus(UUID classId, UUID assignmentId, Timestamp deadline,
+                          int status, Set<StudentSubmission> studentSubmissions) {
+    this.classId = classId;
+    this.assignmentId = assignmentId;
+    this.deadline = deadline;
+    this.status = status;
+//    this.studentSubmissions = studentSubmissions;
   }
 
   public AssignmentStatus() {
   }
+
+//  public boolean hasStudent(UUID studentId) {
+//    for (StudentSubmission submission : studentSubmissions) {
+//      if (submission.getStudentId().equals(studentId)) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
 
   @Override
   public boolean equals(Object obj) {
