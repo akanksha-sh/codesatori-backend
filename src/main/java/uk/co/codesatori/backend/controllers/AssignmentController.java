@@ -60,7 +60,7 @@ public class AssignmentController {
     /* Verify that request has come from a teacher. */
     UUID teacherId = securityService
         .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
-    /* Add new assignment to the database and return to user. */
+    /* Delete assignment from the database and return to user. */
 
     UUID assignmentId = UUID.fromString(id);
 
@@ -72,9 +72,32 @@ public class AssignmentController {
             .collect(Collectors.toList());
 
     if (!assignmentIdsByTeacher.contains(assignmentId)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Teacher does not own assignment he wishes to delete.");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Teacher does not own assignment he wishes to delete.");
     }
 
     assignmentRepository.deleteById(assignmentId);
+  }
+
+  @PutMapping("/assignments/edit/{assignmentIdString}")
+  public Assignment editAssignment(@PathVariable String assignmentIdString, @RequestBody Assignment editAssignmentRequest) {
+    /* Verify that request has come from a teacher. */
+    UUID teacherId = securityService
+        .verifyUserRole(Role.TEACHER, "Only teachers can create assignments.");
+    /* Check if assignmentId is owned by teacher, and then update. */
+
+    UUID assignmentId = UUID.fromString(assignmentIdString);
+
+    Assignment retrievedAssignment = assignmentRepository
+        .findById(assignmentId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment does not exist."));
+
+    if (!retrievedAssignment.getTeacherId().equals(teacherId)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Teacher does not own assignment he wishes to edit.");
+    }
+
+    retrievedAssignment.setAssignmentTemplate(editAssignmentRequest.getAssignmentTemplate());
+    retrievedAssignment.setName(editAssignmentRequest.getName());
+    assignmentRepository.save(retrievedAssignment);
+    return retrievedAssignment;
   }
 }
