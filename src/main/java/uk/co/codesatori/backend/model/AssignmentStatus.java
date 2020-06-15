@@ -30,12 +30,13 @@ public class AssignmentStatus {
   @Column(nullable = false)
   private int status;
 
-  @OneToMany
-  @JoinColumns({
-    @JoinColumn(name = "class_id"),
-    @JoinColumn(name = "assignment_id")
-  })
-  private Set<StudentSubmission> studentSubmissions;
+//  // TODO: Remove this because this will make requests extremely large
+//  @OneToMany
+//  @JoinColumns({
+//    @JoinColumn(name = "class_id"),
+//    @JoinColumn(name = "assignment_id")
+//  })
+//  private Set<StudentSubmission> studentSubmissions;
 
   public AssignmentStatus(UUID classId, UUID assignmentId, Timestamp deadline,
                           int status) {
@@ -43,7 +44,7 @@ public class AssignmentStatus {
     this.assignmentId = assignmentId;
     this.deadline = deadline;
     this.status = status;
-    this.studentSubmissions = Collections.emptySet();
+//    this.studentSubmissions = Collections.emptySet();
   }
 
   public AssignmentStatus(UUID classId, UUID assignmentId, Timestamp deadline,
@@ -52,20 +53,20 @@ public class AssignmentStatus {
     this.assignmentId = assignmentId;
     this.deadline = deadline;
     this.status = status;
-    this.studentSubmissions = studentSubmissions;
+//    this.studentSubmissions = studentSubmissions;
   }
 
   public AssignmentStatus() {
   }
 
-  public boolean hasStudent(UUID studentId) {
-    for (StudentSubmission submission : studentSubmissions) {
-      if (submission.getStudentId().equals(studentId)) {
-        return true;
-      }
-    }
-    return false;
-  }
+//  public boolean hasStudent(UUID studentId) {
+//    for (StudentSubmission submission : studentSubmissions) {
+//      if (submission.getStudentId().equals(studentId)) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
 
   @Override
   public boolean equals(Object obj) {

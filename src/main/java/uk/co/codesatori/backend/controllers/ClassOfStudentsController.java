@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import uk.co.codesatori.backend.model.ClassOfStudents;
+import uk.co.codesatori.backend.model.*;
 import uk.co.codesatori.backend.model.User.Role;
-import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
-import uk.co.codesatori.backend.repositories.UserRepository;
+import uk.co.codesatori.backend.repositories.*;
 import uk.co.codesatori.backend.security.SecurityService;
 
 @RestController
@@ -28,15 +27,44 @@ public class ClassOfStudentsController {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private AssignmentRepository assignmentRepository;
+
+  @Autowired
+  private AssignmentStatusRepository assignmentStatusRepository;
+
+  @Autowired
+  private StudentSubmissionRepository studentSubmissionRepository;
+
   @GetMapping("/classes/student")
-  public List<ClassOfStudents> getClassesOfStudentsForStudentDashboard() {
+  public List<ClassAssignmentInfo> getClassesOfStudentsForStudentDashboard() {
     /* Verify that request has come from a student. */
     UUID studentId = securityService
         .verifyUserRole(Role.STUDENT, "This channel is for students only.");
     /* Filter the database entries based on the given id. */
-    return StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
+
+    List<ClassAssignmentInfo> result = new ArrayList<>();
+
+    List<ClassOfStudents> studentClasses = StreamSupport.stream(classOfStudentsRepository.findAll().spliterator(), false)
         .filter(classOfStudents -> classOfStudents.containsStudentWithId(studentId))
         .collect(Collectors.toList());
+
+    for (ClassOfStudents classOfStudents : studentClasses) {
+      List<AssignmentSubmissionPair> assignmentsSubmissionsForClass  = assignmentStatusRepository
+          .findByClassId(classOfStudents.getClassId())
+          .stream()
+          .map(AssignmentStatus::getAssignmentId)
+          .map(id -> assignmentRepository.findById(id).orElseThrow(IllegalStateException::new))
+          .map(assignment -> {
+            StudentSubmission studentSubmission = studentSubmissionRepository.findById(new StudentSubmission.StudentSubmissionId(classOfStudents.getClassId(), assignment.getAssignmentId(), studentId)).orElseThrow(IllegalStateException::new);
+            return new AssignmentSubmissionPair(assignment, studentSubmission);
+          })
+          .collect(Collectors.toList());
+
+      result.add(new ClassAssignmentInfo(classOfStudents, assignmentsSubmissionsForClass));
+    }
+
+    return result;
   }
 
   @GetMapping("/classes/teacher")
@@ -84,5 +112,19 @@ public class ClassOfStudentsController {
     }
 
     classOfStudentsRepository.deleteById(classId);
+  }
+
+  @Getter
+  @Setter
+  class ClassAssignmentInfo {
+    private ClassOfStudents classOfStudents;
+    private List<AssignmentSubmissionPair> assignmentSubmissionPair;
+
+    ClassAssignmentInfo(ClassOfStudents classOfStudents, List<AssignmentSubmissionPair> assignmentSubmissionPair) {
+      this.classOfStudents = classOfStudents;
+      this.assignmentSubmissionPair = assignmentSubmissionPair;
+    }
+
+    ClassAssignmentInfo() { }
   }
 }

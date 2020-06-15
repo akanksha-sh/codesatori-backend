@@ -33,9 +33,6 @@ public class StudentSubmission {
   @Column(name = "student_id", updatable = false, nullable = false)
   private UUID studentId;
 
-  @Column
-  private String name;
-
   @Column(updatable = false)
   private Timestamp submissionDate;
 
@@ -50,12 +47,11 @@ public class StudentSubmission {
   @Convert(attributeName = "data", converter = JsonToMapConverter.class)
   private Map<String, Object> studentSubmissionTemplate = new HashMap<>();
 
-  public StudentSubmission(UUID classId, UUID assignmentId, UUID studentId, String name, Timestamp submissionDate,
+  public StudentSubmission(UUID classId, UUID assignmentId, UUID studentId, Timestamp submissionDate,
                            int score, int testsPassed, Map<String, Object> studentSubmissionTemplate) {
     this.classId = classId;
     this.assignmentId = assignmentId;
     this.studentId = studentId;
-    this.name = name;
     this.submissionDate = submissionDate;
     this.score = score;
     this.testsPassed = testsPassed;
@@ -96,5 +92,7 @@ public class StudentSubmission {
       this.assignmentId = assignmentId;
       this.studentId = studentId;
     }
+
+    public StudentSubmissionId() {}
   }
 }

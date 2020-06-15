@@ -31,9 +31,11 @@ public class AssignmentStatusService {
   public Optional<AssignmentStatus> publish(AssignmentStatus assignmentStatus) {
     UUID classId = assignmentStatus.getClassId();
     UUID assignmentId = assignmentStatus.getAssignmentId();
-    Set<StudentSubmission> studentSubmissions = new HashSet<>();
-    Map<String, Object> assignmentTemplate;
+//    Set<StudentSubmission> studentSubmissions = new HashSet<>();
+//    Map<String, Object> assignmentTemplate;
     Set<UUID> students;
+
+    assignmentStatusRepository.save(assignmentStatus);
 
     Optional<ClassOfStudents> classOfStudents = classOfStudentsRepository.findById(classId);
     if (classOfStudents.isEmpty()) {
@@ -42,30 +44,27 @@ public class AssignmentStatusService {
       students = classOfStudents.get().getStudentIds();
     }
 
-    Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
-    if (assignment.isEmpty()) {
-      return Optional.empty();
-    } else {
-      assignmentTemplate = assignment.get().getAssignmentTemplate();
-    }
-
-//    for (UUID student : students) {
-//      StudentSubmission submission
-//          = new StudentSubmission(
-//              classId,
-//              assignmentId,
-//              student,
-//              assignment.get().getName(),
-//              null,
-//              -1,
-//              -1,
-//              assignmentTemplate);
-//      studentSubmissionRepository.save(submission);
-//      studentSubmissions.add(submission);
+//    Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
+//    if (assignment.isEmpty()) {
+//      return Optional.empty();
+//    } else {
+//      assignmentTemplate = assignment.get().getAssignmentTemplate();
 //    }
+
+    for (UUID student : students) {
+      StudentSubmission submission
+          = new StudentSubmission(
+              classId,
+              assignmentId,
+              student,
+              null,
+              -1,
+              -1,
+              new HashMap<>());
+      studentSubmissionRepository.save(submission);
+    }
 //
 //    assignmentStatus.setStudentSubmissions(studentSubmissions);
-    assignmentStatusRepository.save(assignmentStatus);
     return Optional.of(assignmentStatus);
   }
 

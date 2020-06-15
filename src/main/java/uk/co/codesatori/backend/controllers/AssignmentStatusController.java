@@ -35,7 +35,7 @@ public class AssignmentStatusController {
     if (output.isPresent()) {
       return output.get();
     } else {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
           "Teacher either does not own this assignment, or does not have this class");
     }
   }
