@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.Assignment;
-import uk.co.codesatori.backend.model.ClassOfStudents;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
 import uk.co.codesatori.backend.security.SecurityService;
@@ -30,7 +29,7 @@ public class AssignmentController {
         .verifyUserRole(Role.STUDENT, "This channel is for students only.");
     /* Filter the database entries based on the given id. */
     return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
-        .filter(assignment -> assignment.getTeacherId().equals(studentId))
+        .filter(assignment -> assignment.isFor(studentId))
         .collect(Collectors.toList());
   }
 
