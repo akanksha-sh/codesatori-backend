@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
 
 @Entity
 @Table(name = "classes_of_students")
@@ -38,6 +39,8 @@ public class ClassOfStudents {
   private UUID teacherId;
   @Column(nullable = false)
   private boolean active;
+  @Column(nullable = false)
+  private String classCode;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "class_to_student_mapping", joinColumns = @JoinColumn(name = "class_id"))
@@ -55,6 +58,8 @@ public class ClassOfStudents {
     this.active = active;
     this.studentIds = studentsIds;
     this.assignmentStatus = assignmentStatus;
+    // Generates the random class code, should make it not repeat in the future.
+    this.classCode = new RandomValueStringGenerator(5).generate().toUpperCase();
   }
 
   public ClassOfStudents() {
