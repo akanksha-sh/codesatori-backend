@@ -56,9 +56,11 @@ public class ClassOfStudentsController {
           .map(AssignmentStatus::getAssignmentId)
           .map(id -> assignmentRepository.findById(id).orElseThrow(IllegalStateException::new))
           .map(assignment -> {
-            StudentSubmission studentSubmission = studentSubmissionRepository.findById(new StudentSubmission.StudentSubmissionId(classOfStudents.getClassId(), assignment.getAssignmentId(), studentId)).orElseThrow(IllegalStateException::new);
+            StudentSubmission studentSubmission = studentSubmissionRepository.findById(new StudentSubmission.StudentSubmissionId(classOfStudents.getClassId(), assignment.getAssignmentId(), studentId)).orElse(null);
+            if (studentSubmission == null) return null;
             return new AssignmentSubmissionPair(assignment, studentSubmission);
           })
+          .filter(Objects::nonNull)
           .collect(Collectors.toList());
 
       result.add(new ClassAssignmentInfo(classOfStudents, assignmentsSubmissionsForClass));
@@ -87,6 +89,19 @@ public class ClassOfStudentsController {
 
     req.setTeacherId(teacherId);
     ClassOfStudents classOfStudents = req.getClassOfStudents(userRepository);
+    classOfStudentsRepository.save(classOfStudents);
+    return classOfStudents;
+  }
+
+  @PostMapping("/classes/join")
+  public ClassOfStudents createNewClassOfStudents(@RequestParam String code) {
+    /* Verify that request has come from a teacher. */
+    UUID studentId = securityService
+        .verifyUserRole(Role.STUDENT, "Only students can join classes.");
+    /* Add new class to the database and return to user. */
+
+    ClassOfStudents classOfStudents = classOfStudentsRepository.findByClassCode(code).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Class code does not exist."));
+    classOfStudents.getStudentIds().add(studentId);
     classOfStudentsRepository.save(classOfStudents);
     return classOfStudents;
   }
