@@ -33,7 +33,7 @@ public class StudentSubmission {
   @Column(name = "student_id", updatable = false, nullable = false)
   private UUID studentId;
 
-  @Column(updatable = false)
+  @Column
   private Timestamp submissionDate;
 
   @Column

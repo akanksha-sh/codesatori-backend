@@ -13,8 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.*;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentRepository;
-import uk.co.codesatori.backend.repositories.AssignmentStatusRepository;
-import uk.co.codesatori.backend.repositories.ClassOfStudentsRepository;
 import uk.co.codesatori.backend.repositories.StudentSubmissionRepository;
 import uk.co.codesatori.backend.security.SecurityService;
 
@@ -43,10 +41,6 @@ public class AssignmentController {
               Assignment assignment = assignmentRepository.findById(submission.getAssignmentId()).orElseThrow(IllegalStateException::new);
               return new AssignmentSubmissionPair(assignment, submission);
         }).collect(Collectors.toList());
-    
-//    return StreamSupport.stream(assignmentRepository.findAll().spliterator(), false)
-//        .filter(assignment -> assignment.isFor(studentId))
-//        .collect(Collectors.toList());
   }
 
 

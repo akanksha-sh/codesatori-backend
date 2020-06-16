@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import uk.co.codesatori.backend.model.Assignment;
 import uk.co.codesatori.backend.model.AssignmentStatus;
+import uk.co.codesatori.backend.model.StudentSubmission;
 import uk.co.codesatori.backend.model.User.Role;
 import uk.co.codesatori.backend.repositories.AssignmentStatusRepository;
 import uk.co.codesatori.backend.repositories.StudentSubmissionRepository;
@@ -38,5 +39,21 @@ public class AssignmentStatusController {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
           "Teacher either does not own this assignment, or does not have this class");
     }
+  }
+
+  @PostMapping("/assignments/save")
+  public void save(@RequestBody StudentSubmission studentSubmission) {
+    /* Verify that request came from a student. */
+    UUID studentId = securityService
+        .verifyUserRole(Role.STUDENT, "Only student can save submission.");
+    assignmentStatusService.save(studentSubmission);
+  }
+
+  @PostMapping("/assignments/submit")
+  public void submit(@RequestBody StudentSubmission studentSubmission) {
+    /* Verify that request came from a student. */
+    UUID studentId = securityService
+        .verifyUserRole(Role.STUDENT, "Only student can save submission.");
+    assignmentStatusService.submit(studentSubmission);
   }
 }
